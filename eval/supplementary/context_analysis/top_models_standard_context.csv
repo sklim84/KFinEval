@@ -1,0 +1,4 @@
+model,overall_avg,context_relevant_only,context_relevant_only_drop,context_relevant_middle,context_relevant_middle_drop,context_relevant_dispersed,context_relevant_dispersed_drop,context_relevant_end,context_relevant_end_drop
+gpt-5.2,6.48,6.93,0.0,6.3,-9.1,6.36,-8.2,6.09,-12.1
+claude-opus-4.5,6.25,6.51,0.0,5.93,-8.9,6.12,-6.0,5.97,-8.2
+claude-sonnet-4.5,6.06,6.18,0.0,5.79,-6.3,6.03,-2.5,6.14,-0.7

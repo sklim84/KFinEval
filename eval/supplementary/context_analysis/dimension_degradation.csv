@@ -1,0 +1,7 @@
+dimension,baseline,with_noise,noise_drop,noise_drop_pct,dispersed,disp_drop,disp_drop_pct
+coherence,5.43,5.44,0.0,0.08,5.24,-0.19,-3.52
+consistency,6.31,6.48,0.17,2.74,6.23,-0.08,-1.25
+accuracy,4.91,4.82,-0.09,-1.85,4.59,-0.33,-6.62
+completeness,4.77,4.79,0.03,0.53,4.48,-0.29,-6.03
+reasoning,5.01,5.05,0.04,0.8,4.85,-0.16,-3.28
+overall_quality,4.92,4.91,-0.01,-0.11,4.67,-0.25,-5.13

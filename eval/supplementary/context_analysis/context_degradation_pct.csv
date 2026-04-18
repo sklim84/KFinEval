@@ -1,0 +1,9 @@
+category,Weak,Medium,Strong
+context_relevant_only,0.00,0.00,0.00
+context_relevant_only_shuffled,11.44,14.56,16.87
+context_relevant_front,-4.29,-4.96,-5.72
+context_relevant_middle,-7.33,-7.73,-6.41
+context_relevant_end,-4.91,-4.90,-7.02
+context_relevant_scattered,-3.85,-6.19,-4.94
+context_relevant_dispersed,-6.46,-4.97,-4.36
+context_relevant_middle_with_en_noise,-0.96,1.50,-0.75

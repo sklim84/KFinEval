@@ -1,0 +1,5 @@
+scheme,spearman_rho,kendall_tau,p_value
+equal_weight,0.998,0.98,1.7839812436248977e-59
+accuracy_heavy,0.998,0.974,2.5472966742884837e-57
+reasoning_heavy,0.997,0.974,3.831828907842522e-55
+completeness_heavy,0.996,0.963,5.127414524748704e-50

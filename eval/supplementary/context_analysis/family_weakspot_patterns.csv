@@ -1,0 +1,8 @@
+family,n_models,mean_score,best_context,best_score,worst_context,worst_score,spread
+Claude,3,6.08,context_relevant_only_shuffled,7.11,context_relevant_middle,5.69,1.42
+EXAONE,3,3.6,context_relevant_only_shuffled,4.43,context_relevant_end,3.22,1.2
+GPT,11,6.08,context_relevant_only_shuffled,7.47,context_relevant_middle,5.72,1.75
+Gemma,5,3.46,context_relevant_only_shuffled,4.07,context_relevant_middle,3.25,0.81
+Mistral,5,4.86,context_relevant_only_shuffled,5.73,context_relevant_scattered,4.66,1.08
+Other,17,4.54,context_relevant_only_shuffled,5.09,context_relevant_middle,4.32,0.77
+Qwen,5,4.48,context_relevant_only_shuffled,5.33,context_relevant_middle,4.15,1.18

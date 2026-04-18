@@ -1,0 +1,4 @@
+model,standard_acc,think_acc,delta,both_correct (a),standard_only (b),think_only (c),both_wrong (d),total,chi2,p_value
+gpt-5.2,52.4,93.9,41.6,153,2,125,16,296,117.2,0.0
+gpt-5-mini,43.9,89.9,45.9,124,6,142,24,296,123.14,0.0
+gpt-5-nano,34.8,82.8,48.0,93,10,152,41,296,122.72,0.0

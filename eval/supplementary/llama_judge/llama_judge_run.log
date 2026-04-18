@@ -1,0 +1,135 @@
+=== Llama-3.1-70B Judge Evaluation ===
+
+
+--- Evaluating gemma-3-270m-it ---
+  Running reasoning evaluation...
+  Reasoning: 50/575 done
+  Reasoning: 100/575 done
+  Warning: No JSON found in response (attempt 1)
+  Reasoning: 150/575 done
+  Reasoning: 200/575 done
+  Reasoning: 250/575 done
+  Reasoning: 300/575 done
+  Reasoning: 350/575 done
+  Reasoning: 400/575 done
+  Reasoning: 450/575 done
+  Reasoning: 500/575 done
+  Reasoning: 550/575 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/reasoning_gemma-3-270m-it.csv
+  Running toxicity evaluation...
+  Toxicity: 25/100 done
+  Toxicity: 50/100 done
+  Toxicity: 75/100 done
+  Toxicity: 100/100 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/toxicity_gemma-3-270m-it.csv
+
+--- Evaluating gemma-3-1b-it ---
+  Running reasoning evaluation...
+  Reasoning: 50/575 done
+  Reasoning: 100/575 done
+  Reasoning: 150/575 done
+  Reasoning: 200/575 done
+  Reasoning: 250/575 done
+  Reasoning: 300/575 done
+  Reasoning: 350/575 done
+  Warning: No JSON found in response (attempt 1)
+  Warning: No JSON found in response (attempt 2)
+  Warning: No JSON found in response (attempt 3)
+  Reasoning: 400/575 done
+  Reasoning: 450/575 done
+  Reasoning: 500/575 done
+  Reasoning: 550/575 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/reasoning_gemma-3-1b-it.csv
+  Running toxicity evaluation...
+  Toxicity: 25/100 done
+  Toxicity: 50/100 done
+  Toxicity: 75/100 done
+  Toxicity: 100/100 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/toxicity_gemma-3-1b-it.csv
+
+--- Evaluating gemma-3-4b-it ---
+  Running reasoning evaluation...
+  Reasoning: 50/573 done
+  Reasoning: 100/573 done
+  Reasoning: 150/573 done
+  Reasoning: 200/573 done
+  Reasoning: 250/573 done
+  Reasoning: 300/573 done
+  Reasoning: 350/573 done
+  Reasoning: 400/573 done
+  Reasoning: 450/573 done
+  Reasoning: 500/573 done
+  Reasoning: 550/573 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/reasoning_gemma-3-4b-it.csv
+  Running toxicity evaluation...
+  Toxicity: 25/100 done
+  Toxicity: 50/100 done
+  Toxicity: 75/100 done
+  Toxicity: 100/100 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/toxicity_gemma-3-4b-it.csv
+
+--- Evaluating gemma-3-12b-it ---
+  Running reasoning evaluation...
+  Reasoning: 50/575 done
+  Reasoning: 100/575 done
+  Reasoning: 150/575 done
+  Reasoning: 200/575 done
+  Reasoning: 250/575 done
+  Reasoning: 300/575 done
+  Reasoning: 350/575 done
+  Reasoning: 400/575 done
+  Reasoning: 450/575 done
+  Reasoning: 500/575 done
+  Reasoning: 550/575 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/reasoning_gemma-3-12b-it.csv
+  Running toxicity evaluation...
+  Toxicity: 25/100 done
+  Warning: No JSON found in response (attempt 1)
+  Warning: No JSON found in response (attempt 2)
+  Warning: No JSON found in response (attempt 3)
+  Toxicity: 50/100 done
+  Warning: No JSON found in response (attempt 1)
+  Warning: No JSON found in response (attempt 2)
+  Warning: No JSON found in response (attempt 3)
+  Toxicity: 75/100 done
+  Warning: No JSON found in response (attempt 1)
+  Warning: No JSON found in response (attempt 2)
+  Warning: No JSON found in response (attempt 3)
+  Toxicity: 100/100 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/toxicity_gemma-3-12b-it.csv
+
+--- Evaluating gemma-3-27b-it ---
+  Running reasoning evaluation...
+  Reasoning: 50/575 done
+  Reasoning: 100/575 done
+  Warning: No JSON found in response (attempt 1)
+  Reasoning: 150/575 done
+  Reasoning: 200/575 done
+  Reasoning: 250/575 done
+  Reasoning: 300/575 done
+  Reasoning: 350/575 done
+  Reasoning: 400/575 done
+  Reasoning: 450/575 done
+  Reasoning: 500/575 done
+  Reasoning: 550/575 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/reasoning_gemma-3-27b-it.csv
+  Running toxicity evaluation...
+  Toxicity: 25/100 done
+  Toxicity: 50/100 done
+  Toxicity: 75/100 done
+  Toxicity: 100/100 done
+  Saved: /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results/toxicity_gemma-3-27b-it.csv
+
+=== Computing Summary ===
+
+## Three-Way Judge Comparison (GPT-5.2 vs Llama-3.1-70B)
+
+| Model | GPT Toxicity | Llama Toxicity | Δ | GPT Reasoning | Llama Reasoning | Δ |
+|---|---|---|---|---|---|---|
+| gemma-3-270m-it | 3.98 | 5.67 | 1.69 | 1.0 | 1.38 | 0.38 |
+| gemma-3-1b-it | 6.14 | 5.31 | -0.83 | 2.02 | 4.49 | 2.47 |
+| gemma-3-4b-it | 7.0 | 7.93 | 0.93 | 3.87 | 6.47 | 2.6 |
+| gemma-3-12b-it | 5.61 | 5.92 | 0.31 | 4.85 | 7.13 | 2.28 |
+| gemma-3-27b-it | 5.35 | 4.01 | -1.34 | 5.24 | 7.29 | 2.05 |
+
+Results saved to /home/work/kftc_model/KFinEval/_manuscript/rebuttal/llama_judge_results
