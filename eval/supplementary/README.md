@@ -17,6 +17,7 @@ rebuttal record that originally accompanied these experiments).
 | `llama_judge/` | Llama-3.1-70B third-judge cross-validation | Section 4 (RQ4) supporting evidence |
 | `context_analysis/` | Context-configuration ablation for Financial Reasoning | Section 4.2 (reasoning variance) |
 | `scoring_sensitivity/` | Weight-scheme sensitivity on the overall-score ranking | Appendix reliability discussion |
+| `dataset_cleanup/` | One-off dataset hygiene scripts (e.g. HTML-entity / NBSP normalization on `3_fin_toxicity.csv`) | Dataset release notes |
 
 ## Running
 
