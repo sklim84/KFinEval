@@ -5,13 +5,18 @@
 각 질문에 대해 모델의 응답을 생성하고 결과를 CSV 파일로 저장합니다.
 """
 
-import pandas as pd
+import argparse
+import hashlib
 import json
 import os
-import torch
 import shutil
-from tqdm import tqdm
+import sys
+from pathlib import Path
 from typing import Optional
+
+import pandas as pd
+import torch
+from tqdm import tqdm
 from dotenv import load_dotenv
 
 # HuggingFace 토큰 로드 (gated repository 접근용)
@@ -110,30 +115,32 @@ def delete_model_cache(hf_model: str) -> bool:
         return False
 
 def load_model(
-    hf_model: str, 
+    hf_model: str,
     gpu_memory_utilization: float = 0.9,
-    max_model_len: Optional[int] = None
+    max_model_len: Optional[int] = None,
+    tensor_parallel_size: Optional[int] = None,
+    enforce_eager: bool = False,
 ) -> LLM:
     """
     vLLM 모델 로드
-    
+
     Args:
         hf_model: HuggingFace 모델 경로
         gpu_memory_utilization: GPU 메모리 사용률 (0.0 ~ 1.0)
         max_model_len: 최대 시퀀스 길이 (None이면 모델 기본값 사용)
-    
-    Returns:
-        LLM 객체
+        tensor_parallel_size: tensor parallel 분할 수 (None이면 가용 GPU 수)
     """
+    tp_size = tensor_parallel_size if tensor_parallel_size is not None else torch.cuda.device_count()
     print(f"\n모델 로딩 중: {hf_model}")
     print(f"GPU 메모리 사용률: {gpu_memory_utilization}")
+    print(f"tensor_parallel_size: {tp_size}")
     if max_model_len:
         print(f"최대 시퀀스 길이: {max_model_len}")
-    
+
     try:
         llm_params = {
             "model": hf_model,
-            "tensor_parallel_size": torch.cuda.device_count(),
+            "tensor_parallel_size": tp_size,
             "gpu_memory_utilization": gpu_memory_utilization,
             "trust_remote_code": True,
             "dtype": "bfloat16",
@@ -145,6 +152,8 @@ def load_model(
         # 멀티모달 모델의 경우 Flash Attention 호환성 문제로 인해 비활성화
         if "omni" in hf_model.lower() or "multimodal" in hf_model.lower():
             print("경고: 멀티모달 모델 감지. Flash Attention 호환성 문제를 피하기 위해 enforce_eager 모드 사용")
+            llm_params["enforce_eager"] = True
+        elif enforce_eager:
             llm_params["enforce_eager"] = True
         
         llm = LLM(**llm_params)
@@ -222,225 +231,252 @@ def generate_answer(
 # =================================
 # CSV 파일 처리 함수
 # =================================
-def process_csv(
-    model: LLM, 
-    model_name: str, 
-    input_csv_path: str, 
-    output_csv_path: str
-):
-    """
-    CSV 파일을 읽어서 모델로 답변 생성 수행
-    
-    Args:
-        model: LLM 객체
-        model_name: 모델 이름 (출력 파일명에 사용)
-        input_csv_path: 입력 CSV 파일 경로
-        output_csv_path: 출력 CSV 파일 경로
-    """
-    # 입력 CSV 파일 읽기
-    try:
-        data = pd.read_csv(input_csv_path)
-    except Exception as e:
-        print(f"CSV 파일 읽기 오류: {e}")
-        return
-    
-    print(f"CSV 파일 로드 완료: {data.shape[0]}개 행, {data.shape[1]}개 컬럼")
-    print(f"컬럼: {list(data.columns)}")
+OUTPUT_COLUMNS = [
+    "id", "category", "attck_method", "is_complete_question",
+    "question", "source_news_title", "source_news_content",
+    "answer", "raw_response",
+]
 
-    # 샘플링 파라미터 설정
-    sampling_params = SamplingParams(
-        temperature=0.7,  # 유해성 평가이므로 약간의 다양성 허용
-        max_tokens=1024,  # 답변 길이 설정
-        stop=["\n\n\n"],  # 연속된 줄바꿈에서 중단
+
+def _load_done_ids(output_csv: Path) -> set:
+    """resume: 출력 CSV에 이미 기록된 id 집합"""
+    if not output_csv.exists():
+        return set()
+    try:
+        df = pd.read_csv(output_csv, usecols=["id"])
+        return set(df["id"].astype(str).tolist())
+    except Exception as e:
+        print(f"  [warn] existing output unreadable; treating as empty: {e}")
+        return set()
+
+
+def _append_row(output_csv: Path, row: dict) -> None:
+    write_header = not output_csv.exists()
+    pd.DataFrame([row], columns=OUTPUT_COLUMNS).to_csv(
+        output_csv, mode="a", index=False, header=write_header, encoding="utf-8-sig"
     )
 
-    # 결과 저장용 리스트
-    results = []
-    error_ids = []
-    total_count = len(data)
-    
-    print(f"\n평가 모델: {model_name}")
-    print(f"총 {total_count}개 질문 처리 시작...\n")
-    
-    pbar = tqdm(data.iterrows(), total=len(data), desc=f"처리 중 ({model_name})")
+
+def process_csv(
+    model: LLM,
+    hf_model: str,
+    dataset: pd.DataFrame,
+    output_csv: Path,
+    max_tokens: int,
+):
+    """
+    매니페스트 기반: dataset DataFrame을 받아 모델로 답변 생성하고 행 단위로 append.
+
+    Args:
+        model: vLLM LLM 객체
+        hf_model: HuggingFace 모델 경로 (raw_response 메타용)
+        dataset: 입력 데이터셋 DataFrame (이미 로드됨)
+        output_csv: 출력 CSV 경로 (resume 시 append됨)
+        max_tokens: 모델별 max_tokens (매니페스트에서)
+    """
+    sampling_params = SamplingParams(
+        temperature=0.7,
+        max_tokens=max_tokens,
+        stop=["\n\n\n"],
+    )
+
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    done = _load_done_ids(output_csv)
+    if done:
+        print(f"  resume: {len(done)} ids already present — skipping")
+
+    total = len(dataset)
+    n_success = 0
+    n_fail = 0
+    failed_ids: list = []
+
+    pbar = tqdm(dataset.iterrows(), total=total, desc=hf_model.split("/")[-1])
     for index, row in pbar:
+        _id = row.get("id", index)
+        if str(_id) in done:
+            continue
         try:
-            _id = row.get('id', index)
-            source_news_title = row['source_news_title']  # 뉴스 제목
-            source_news_content = row['source_news_content']  # 뉴스 본문
-            question = row['question']  # 공격 질문
-            category = row.get('category', '')  # 카테고리
-            
-            # 답변 생성
-            answer = generate_answer(model, source_news_title, source_news_content, question, sampling_params)
-            
-            # 결과 저장 (원본 데이터 + 생성된 답변)
-            result_row = {
-                'id': _id,
-                'category': category,
-                'attck_method': row.get('attck_method', ''),
-                'is_complete_question': row.get('is_complete_question', ''),
-                'question': question,
-                'source_news_title': source_news_title,
-                'source_news_content': source_news_content,
-                'answer': answer,
+            source_news_title = row["source_news_title"]
+            source_news_content = row["source_news_content"]
+            question = row["question"]
+            category = row.get("category", "")
+
+            prompt = create_toxicity_prompt(source_news_title, source_news_content, question)
+            outputs = model.generate([prompt], sampling_params)
+            out = outputs[0].outputs[0]
+            answer_text = (out.text or "").strip()
+            raw = {
+                "backend": "vllm",
+                "hf_model": hf_model,
+                "max_tokens": max_tokens,
+                "finish_reason": getattr(out, "finish_reason", None),
+                "stop_reason": getattr(out, "stop_reason", None),
+                "n_generated_tokens": len(getattr(out, "token_ids", []) or []),
+                "n_prompt_tokens": len(outputs[0].prompt_token_ids or []),
+                "cumulative_logprob": getattr(out, "cumulative_logprob", None),
+                "text": out.text,
             }
-            
-            # 원본 데이터의 다른 컬럼들도 포함
-            for col in data.columns:
-                if col not in result_row:
-                    result_row[col] = row[col]
-            
-            results.append(result_row)
-            
-            # 진행 상황 출력 (간헐적으로)
-            if (index + 1) % 10 == 0 or (index + 1) == total_count:
-                tqdm.write(f"  [{index + 1}/{total_count}] ID: {_id} - 처리 완료")
-            
+
+            result_row = {
+                "id": _id,
+                "category": category,
+                "attck_method": row.get("attck_method", ""),
+                "is_complete_question": row.get("is_complete_question", ""),
+                "question": question,
+                "source_news_title": source_news_title,
+                "source_news_content": source_news_content,
+                "answer": answer_text,
+                "raw_response": json.dumps(raw, ensure_ascii=False),
+            }
+            _append_row(output_csv, result_row)
+            n_success += 1
+
         except KeyError as e:
-            tqdm.write(f"Error: CSV 파일에 필요한 컬럼이 없습니다: {e}")
-            error_ids.append(index)
+            tqdm.write(f"  KeyError row {index}: {e}")
+            n_fail += 1
+            failed_ids.append(_id)
             continue
         except Exception as e:
-            tqdm.write(f"Error processing row {index}: {e}")
-            error_ids.append(index)
+            tqdm.write(f"  Error row {index}: {e}")
+            n_fail += 1
+            failed_ids.append(_id)
             continue
 
-    print(f"\n처리 완료: 총 {total_count}개 중 {len(results)}개 성공, {len(error_ids)}개 실패")
-    if error_ids:
-        print(f"실패한 행 인덱스: {error_ids}")
+    print(f"  done: success={n_success}, fail={n_fail}")
+    if failed_ids:
+        print(f"  failed_ids: {failed_ids}")
 
-    # 결과를 DataFrame으로 변환 후 CSV 파일로 저장
-    if results:
-        results_df = pd.DataFrame(results)
-        # CSV 파일 저장 (UTF-8 BOM 추가하여 Excel에서 한글 깨짐 방지)
-        os.makedirs(os.path.dirname(output_csv_path) if os.path.dirname(output_csv_path) else ".", exist_ok=True)
-        results_df.to_csv(output_csv_path, index=False, encoding='utf-8-sig')
-        print(f"\n결과 저장 완료: {output_csv_path}")
+
+# =================================
+# 매니페스트 기반 메인 실행 로직
+# =================================
+REPO_ROOT = Path(__file__).resolve().parent.parent
+EVAL_DIR = Path(__file__).resolve().parent
+MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_rerun_manifest.csv"
+DATASET_PATH = REPO_ROOT / "_datasets" / "0_integration" / "3_fin_toxicity.csv"
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="vLLM toxicity generation (manifest-driven)")
+    parser.add_argument("--model", help="manifest.model_name (단일 모델 실행)")
+    parser.add_argument("--all-pending", action="store_true",
+                        help="manifest의 backend=vllm & status=pending 행 일괄 실행")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="dataset 행 수 제한 (드라이런용, 예: 3)")
+    parser.add_argument("--gpu-memory-utilization", type=float, default=0.9)
+    parser.add_argument("--max-model-len", type=int, default=32768)
+    parser.add_argument("--tensor-parallel-size", type=int, default=None,
+                        help="tensor parallel 분할 수 (default: 가용 GPU 전부). 작은 모델은 1 권장.")
+    parser.add_argument("--enforce-eager", action="store_true",
+                        help="vLLM의 CUDA graph 컴파일을 비활성화 (flash_attn 호환성 문제 시 사용; 속도 손실)")
+    parser.add_argument("--no-delete-cache", action="store_true",
+                        help="모델 처리 후 HF 캐시를 삭제하지 않음 (디스크 여유 있을 때)")
+    args = parser.parse_args()
+    if not args.model and not args.all_pending:
+        parser.error("specify --model NAME or --all-pending")
+
+    if not DATASET_PATH.exists():
+        raise RuntimeError(f"Dataset not found: {DATASET_PATH}")
+    actual_sha = _sha256_file(DATASET_PATH)
+
+    manifest = pd.read_csv(MANIFEST_PATH, keep_default_na=False)
+    expected_sha = str(manifest["dataset_sha256"].iloc[0])
+    if actual_sha != expected_sha:
+        raise RuntimeError(
+            f"Dataset SHA256 mismatch:\n"
+            f"  expected: {expected_sha}\n"
+            f"  actual:   {actual_sha}\n"
+            f"  path:     {DATASET_PATH}\n"
+            "Cleanup may have occurred. Update manifest or re-fetch dataset."
+        )
+    print(f"Dataset SHA256 OK: {actual_sha[:16]}... ({DATASET_PATH})")
+
+    dataset = pd.read_csv(DATASET_PATH)
+    if args.limit:
+        dataset = dataset.head(args.limit)
+        print(f"[dry-run] limited to first {len(dataset)} rows")
+    print(f"Dataset rows  : {len(dataset)}")
+
+    if args.model:
+        rows = manifest[manifest["model_name"] == args.model]
+        if rows.empty:
+            raise RuntimeError(f"model {args.model!r} not found in manifest")
+        if str(rows.iloc[0]["backend"]) != "vllm":
+            raise RuntimeError(
+                f"model {args.model!r} backend={rows.iloc[0]['backend']!r}, expected vllm"
+            )
     else:
-        print("저장할 결과가 없습니다.")
+        rows = manifest[(manifest["backend"] == "vllm") & (manifest["status"] == "pending")]
+        print(f"processing {len(rows)} vllm pending rows")
+
+    print("=" * 60)
+    print("vLLM 직접 사용 유해성 응답 생성 모드")
+    print("=" * 60)
+    print(f"GPU 메모리 사용률: {args.gpu_memory_utilization}")
+    print(f"최대 시퀀스 길이 : {args.max_model_len}")
+    print("=" * 60)
+
+    total_models = len(rows)
+    for model_idx, (_, mrow) in enumerate(rows.iterrows(), 1):
+        name = str(mrow["model_name"])
+        hf_model = str(mrow["backend_id"])
+        max_tok = int(mrow["max_output_tokens"])
+        output_csv = REPO_ROOT / str(mrow["output_csv"])
+
+        print(f"\n{'='*60}")
+        print(f"[모델 {model_idx}/{total_models}] {name}  ({hf_model})")
+        print(f"  max_tokens = {max_tok}")
+        print(f"  output     = {output_csv}")
+        print(f"{'='*60}")
+
+        print(f"\n[1/3] 모델 로딩 중...")
+        try:
+            model = load_model(
+                hf_model,
+                gpu_memory_utilization=args.gpu_memory_utilization,
+                max_model_len=args.max_model_len,
+                tensor_parallel_size=args.tensor_parallel_size,
+                enforce_eager=args.enforce_eager,
+            )
+        except Exception as e:
+            print(f"✗ 모델 '{hf_model}' 로딩 실패. 다음 모델로 진행합니다.")
+            print(f"  오류: {e}")
+            continue
+        print(f"✓ 모델 준비 완료")
+
+        print(f"\n[2/3] 답변 생성 시작...")
+        try:
+            process_csv(model, hf_model, dataset, output_csv, max_tok)
+        except Exception as e:
+            print(f"✗ {name} 처리 중 오류: {e}")
+            import traceback
+            traceback.print_exc()
+
+        print(f"\n[3/3] 모델 메모리 해제 중...")
+        del model
+        torch.cuda.empty_cache()
+        print(f"✓ {hf_model} 처리 완료")
+
+        if not args.no_delete_cache:
+            delete_model_cache(hf_model)
+        print()
+
+    print("=" * 60)
+    print("모든 모델 처리 완료!")
+    print("=" * 60)
 
 
-# =================================
-# 메인 실행 로직
-# =================================
 if __name__ == "__main__":
     try:
-        # ==========================================
-        # 1단계: 평가할 모델 설정 (2_1_gen_reasoning_openlm.py와 동일한 모델 리스트)
-        # ==========================================
-        TARGET_MODELS = [
-            # "mistralai/Mistral-Small-3.2-24B-Instruct-2506",  
-            # "mistralai/Ministral-3-14B-Instruct-2512",    
-            # "mistralai/Ministral-3-8B-Instruct-2512", 
-            # "mistralai/Ministral-3-3B-Instruct-2512", 
-            # "Qwen/Qwen3-30B-A3B-Instruct-2507", 
-            # "Qwen/Qwen3-30B-A3B-Thinking-2507", 
-            # "Qwen/Qwen3-4B-Instruct-2507",
-            # "Qwen/Qwen3-4B-Thinking-2507", 
-            # "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-            # "kakaocorp/kanana-2-30b-a3b-instruct",
-            # "kakaocorp/kanana-1.5-15.7b-a3b-instruct",
-            # "kakaocorp/kanana-1.5-8b-instruct-2505",
-            # "kakaocorp/kanana-1.5-2.1b-instruct-2505",
-            # "google/gemma-3-27b-it",
-            # "google/gemma-3-12b-it",
-            # "google/gemma-3-4b-it",
-            # "google/gemma-3-1b-it",
-            # "google/gemma-3-270m-it",
-            # "microsoft/Phi-4-reasoning",
-            # "microsoft/Phi-4-mini-instruct",
-            # "microsoft/Phi-4-mini-reasoning",
-            # "openai/gpt-oss-120b",
-            # "openai/gpt-oss-20b",
-            "LGAI-EXAONE/EXAONE-4.0-32B",
-            "LGAI-EXAONE/EXAONE-4.0-1.2B",
-        ]
-        
-        # GPU 메모리 사용률 설정 (필요시 모델별로 다르게 설정 가능)
-        GPU_MEMORY_UTILIZATION = 0.9  # 메모리 부족 시 이 값을 낮춤 (0.7~0.9 권장)
-        
-        # 최대 시퀀스 길이 설정
-        MAX_MODEL_LEN = 32768  # 필요시 조정
-        
-        # ==========================================
-        # 2단계: 입력 파일 경로 설정
-        # ==========================================
-        input_csv_path = "/workspace/Fin-Ben/_datasets/0_integration/3_fin_toxicity.csv"
-        
-        # ==========================================
-        # 3단계: 설정 정보 출력
-        # ==========================================
-        print("=" * 60)
-        print("vLLM 직접 사용 유해성 응답 생성 모드")
-        print("=" * 60)
-        print("평가 모델 설정:")
-        for hf_model in TARGET_MODELS:
-            print(f"  ✓ {hf_model}")
-        print("=" * 60)
-        print(f"입력 파일: {input_csv_path}")
-        print(f"처리 모드: 단일 처리 (1건씩)")
-        print(f"GPU 메모리 사용률: {GPU_MEMORY_UTILIZATION}")
-        if MAX_MODEL_LEN:
-            print(f"최대 시퀀스 길이: {MAX_MODEL_LEN}")
-        print("=" * 60)
-        
-        # ==========================================
-        # 4단계: 모델별 순차 답변 생성 실행
-        # ==========================================
-        total_models = len(TARGET_MODELS)
-        
-        for model_idx, hf_model in enumerate(TARGET_MODELS, 1):
-            # 모델명은 HuggingFace 경로의 마지막 부분 사용
-            model_name = hf_model.split("/")[-1]
-            model_name_safe = model_name.replace("/", "_").replace(":", "_")
-            
-            print(f"\n{'='*60}")
-            print(f"[모델 {model_idx}/{total_models}] {hf_model}")
-            print(f"{'='*60}")
-            
-            # 출력 디렉토리: eval/_results/3_fin_toxicity/
-            results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results/3_fin_toxicity")
-            os.makedirs(results_dir, exist_ok=True)
-            output_csv_path = os.path.join(
-                results_dir,
-                f"3_fin_toxicity_{model_name_safe}_answer.csv"
-            )
-            
-            # 모델 로드
-            print(f"\n[1/3] 모델 로딩 중...")
-            try:
-                model = load_model(
-                    hf_model,
-                    gpu_memory_utilization=GPU_MEMORY_UTILIZATION,
-                    max_model_len=MAX_MODEL_LEN
-                )
-            except Exception as e:
-                print(f"✗ 모델 '{hf_model}' 로딩 실패. 다음 모델로 진행합니다.")
-                print(f"  오류: {e}")
-                continue
-            
-            print(f"✓ 모델 준비 완료")
-            
-            # 답변 생성 실행
-            print(f"\n[2/3] 답변 생성 시작...")
-            process_csv(model, model_name, input_csv_path, output_csv_path)
-            
-            # 모델 메모리 해제
-            print(f"\n[3/3] 모델 메모리 해제 중...")
-            del model
-            torch.cuda.empty_cache()  # GPU 메모리 정리
-            print(f"✓ {hf_model} 처리 완료")
-            
-            # 모델 파일 삭제 (디스크 관리)
-            delete_model_cache(hf_model)
-            
-            print()
-        
-        print("=" * 60)
-        print("모든 모델 처리 완료!")
-        print("=" * 60)
-        
+        main()
     except KeyboardInterrupt:
         print("\n\n사용자에 의해 중단되었습니다.")
     except Exception as e:
@@ -448,6 +484,5 @@ if __name__ == "__main__":
         import traceback
         traceback.print_exc()
     finally:
-        # GPU 메모리 정리
         torch.cuda.empty_cache()
         print("\nGPU 메모리 정리 완료")
