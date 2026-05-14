@@ -25,7 +25,7 @@ from openai import InternalServerError
 # =================================
 # OpenAI API 키 설정 (.env 파일에서 로드)
 # =================================
-env_path = os.path.join(os.path.dirname(__file__), ".env")
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(env_path)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))

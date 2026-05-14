@@ -12,16 +12,22 @@ import torch
 import shutil
 from tqdm import tqdm
 from typing import Optional
+from dotenv import load_dotenv
 
-# HuggingFace 토큰 설정 (gated repository 접근용)
-# 환경 변수에 토큰이 없으면 기본 토큰 사용
-if "HF_TOKEN" not in os.environ and "HUGGINGFACE_HUB_TOKEN" not in os.environ:
-    default_token = "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"
-    os.environ["HF_TOKEN"] = default_token
-    os.environ["HUGGINGFACE_HUB_TOKEN"] = default_token
-    print("✓ HuggingFace 토큰 설정 완료 (기본 토큰 사용)")
-else:
-    print("✓ HuggingFace 토큰 확인됨 (환경 변수에서 로드)")
+# HuggingFace 토큰 로드 (gated repository 접근용)
+# 프로젝트 루트 .env (gitignored)에서 HF_TOKEN 을 읽음. 하드코딩 폴백 없음.
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+load_dotenv(env_path)
+
+_hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_HUB_TOKEN")
+if not _hf_token:
+    raise RuntimeError(
+        f"HF_TOKEN not set. Add it to {env_path} (HF_TOKEN=hf_...) "
+        f"or export HF_TOKEN/HUGGINGFACE_HUB_TOKEN in the environment."
+    )
+os.environ["HF_TOKEN"] = _hf_token
+os.environ["HUGGINGFACE_HUB_TOKEN"] = _hf_token
+print("✓ HuggingFace 토큰 확인됨")
 
 # HuggingFace 캐시를 workspace로 설정 (모듈 로드 전에 설정해야 함)
 workspace_cache_dir = "/workspace/.cache/huggingface"

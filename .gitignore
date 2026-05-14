@@ -1,0 +1,7 @@
+_manuscript/
+.claude/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example

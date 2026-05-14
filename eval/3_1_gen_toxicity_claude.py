@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 # =================================
 # Anthropic API 키 설정 (.env 파일에서 로드)
 # =================================
-env_path = os.path.join(os.path.dirname(__file__), ".env")
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(env_path)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
