@@ -8,3 +8,7 @@ _manuscript/
 
 # Run logs (progress bars, intermediate stdout)
 eval/logs/
+
+# Python bytecode
+__pycache__/
+*.pyc
