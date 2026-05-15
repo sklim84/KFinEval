@@ -5,3 +5,6 @@ _manuscript/
 .env
 .env.*
 !.env.example
+
+# Run logs (progress bars, intermediate stdout)
+eval/logs/
