@@ -305,13 +305,13 @@ def process_csv(
     if done:
         print(f"  resume: {len(done)} ids already present — skipping")
 
-    total = len(dataset)
-    n_success = 0
-    n_fail = 0
-    failed_ids: list = []
-
-    pbar = tqdm(dataset.iterrows(), total=total, desc=hf_model.split("/")[-1])
-    for index, row in pbar:
+    # Build prompts + metadata for not-yet-done rows so vLLM can batch the
+    # entire workload in a single generate() call. Per-row generate() is
+    # ~20x slower because it defeats continuous batching.
+    pending_meta = []
+    pending_prompts = []
+    skipped_rows = []
+    for index, row in dataset.iterrows():
         _id = row.get("id", index)
         if str(_id) in done:
             continue
@@ -320,47 +320,64 @@ def process_csv(
             source_news_content = row["source_news_content"]
             question = row["question"]
             category = row.get("category", "")
-
-            prompt = create_toxicity_prompt(source_news_title, source_news_content, question)
-            outputs = model.generate([prompt], sampling_params)
-            out = outputs[0].outputs[0]
-            answer_text = (out.text or "").strip()
-            raw = {
-                "backend": "vllm",
-                "hf_model": hf_model,
-                "max_tokens": max_tokens,
-                "finish_reason": getattr(out, "finish_reason", None),
-                "stop_reason": getattr(out, "stop_reason", None),
-                "n_generated_tokens": len(getattr(out, "token_ids", []) or []),
-                "n_prompt_tokens": len(outputs[0].prompt_token_ids or []),
-                "cumulative_logprob": getattr(out, "cumulative_logprob", None),
-                "text": out.text,
-            }
-
-            result_row = {
-                "id": _id,
-                "category": category,
-                "attck_method": row.get("attck_method", ""),
-                "is_complete_question": row.get("is_complete_question", ""),
-                "question": question,
-                "source_news_title": source_news_title,
-                "source_news_content": source_news_content,
-                "answer": answer_text,
-                "raw_response": json.dumps(raw, ensure_ascii=False),
-            }
-            _append_row(output_csv, result_row)
-            n_success += 1
-
         except KeyError as e:
             tqdm.write(f"  KeyError row {index}: {e}")
-            n_fail += 1
-            failed_ids.append(_id)
+            skipped_rows.append(_id)
             continue
+        pending_meta.append({
+            "id": _id,
+            "category": category,
+            "attck_method": row.get("attck_method", ""),
+            "is_complete_question": row.get("is_complete_question", ""),
+            "question": question,
+            "source_news_title": source_news_title,
+            "source_news_content": source_news_content,
+        })
+        pending_prompts.append(create_toxicity_prompt(
+            source_news_title, source_news_content, question,
+        ))
+
+    n_pending = len(pending_prompts)
+    print(f"  vLLM batched generate: {n_pending} prompts (max_tokens={max_tokens})")
+
+    n_success = 0
+    n_fail = len(skipped_rows)
+    failed_ids: list = list(skipped_rows)
+
+    if n_pending:
+        try:
+            outputs = model.generate(pending_prompts, sampling_params)
         except Exception as e:
-            tqdm.write(f"  Error row {index}: {e}")
-            n_fail += 1
-            failed_ids.append(_id)
-            continue
+            print(f"  generation failed: {e}")
+            return {"n_success": 0, "n_fail": n_pending + n_fail,
+                    "failed_ids": [m["id"] for m in pending_meta] + failed_ids}
+
+        for meta, req_out in tqdm(
+            zip(pending_meta, outputs), total=n_pending,
+            desc=hf_model.split("/")[-1],
+        ):
+            try:
+                out = req_out.outputs[0]
+                answer_text = (out.text or "").strip()
+                raw = {
+                    "backend": "vllm",
+                    "hf_model": hf_model,
+                    "max_tokens": max_tokens,
+                    "finish_reason": getattr(out, "finish_reason", None),
+                    "stop_reason": getattr(out, "stop_reason", None),
+                    "n_generated_tokens": len(getattr(out, "token_ids", []) or []),
+                    "n_prompt_tokens": len(req_out.prompt_token_ids or []),
+                    "cumulative_logprob": getattr(out, "cumulative_logprob", None),
+                    "text": out.text,
+                }
+                result_row = {**meta, "answer": answer_text,
+                              "raw_response": json.dumps(raw, ensure_ascii=False)}
+                _append_row(output_csv, result_row)
+                n_success += 1
+            except Exception as e:
+                tqdm.write(f"  parse error id={meta['id']}: {e}")
+                n_fail += 1
+                failed_ids.append(meta["id"])
 
     print(f"  done: success={n_success}, fail={n_fail}")
     if failed_ids:
