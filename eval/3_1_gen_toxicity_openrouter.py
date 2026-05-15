@@ -20,6 +20,7 @@ import json
 import os
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -145,6 +146,26 @@ def append_row(output_csv: Path, row: dict) -> None:
     )
 
 
+def _iso_now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def update_manifest_row(model_name: str, **updates) -> None:
+    """매니페스트 CSV의 해당 model_name 행을 in-place 업데이트.
+    동일 프로세스 내 sequential 호출 가정 (lock 없음)."""
+    df = pd.read_csv(MANIFEST_PATH, keep_default_na=False)
+    mask = df["model_name"] == model_name
+    if not mask.any():
+        print(f"  [warn] manifest row {model_name!r} not found; skipping update")
+        return
+    for col, val in updates.items():
+        if col not in df.columns:
+            print(f"  [warn] manifest column {col!r} not in schema; skipping")
+            continue
+        df.loc[mask, col] = val
+    df.to_csv(MANIFEST_PATH, index=False)
+
+
 # =================================
 # 모델 단위 처리
 # =================================
@@ -161,6 +182,8 @@ def process_model_row(manifest_row: pd.Series, dataset: pd.DataFrame) -> dict:
     print(f"  max_tokens   : {max_tok}")
     print(f"  output_csv   : {output_csv}")
     output_csv.parent.mkdir(parents=True, exist_ok=True)
+
+    update_manifest_row(name, status="in_progress", started_at=_iso_now())
 
     done = load_done_ids(output_csv)
     if done:
@@ -219,6 +242,17 @@ def process_model_row(manifest_row: pd.Series, dataset: pd.DataFrame) -> dict:
     print(f"  done         : success={n_success}, fail={n_fail}, cost~${total_cost:.4f}")
     if failed_ids:
         print(f"  failed_ids   : {failed_ids}")
+
+    # status: 결과 CSV에 실제 row가 몇 개 들어있는지 기준 (resume 누적 포함)
+    final_done = len(load_done_ids(output_csv))
+    status = "done" if n_fail == 0 else "partial"
+    update_manifest_row(
+        name,
+        status=status,
+        finished_at=_iso_now(),
+        n_rows_done=final_done,
+        cost_usd=round(total_cost, 6),
+    )
     return {
         "n_success": n_success,
         "n_fail": n_fail,
@@ -281,9 +315,19 @@ def main():
         ]
         print(f"processing {len(rows)} openrouter pending rows")
 
-    # 실행
+    # 실행 (모델별 try/except — 한 모델이 죽어도 나머지는 진행)
     for _, mrow in rows.iterrows():
-        process_model_row(mrow, dataset)
+        name = str(mrow["model_name"])
+        try:
+            process_model_row(mrow, dataset)
+        except KeyboardInterrupt:
+            update_manifest_row(name, status="pending")
+            raise
+        except Exception as e:
+            print(f"  ✗ {name} 처리 중 예외: {e}")
+            import traceback
+            traceback.print_exc()
+            update_manifest_row(name, status="failed", finished_at=_iso_now())
 
 
 if __name__ == "__main__":

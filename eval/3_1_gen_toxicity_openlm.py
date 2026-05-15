@@ -11,6 +11,7 @@ import json
 import os
 import shutil
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -257,6 +258,25 @@ def _append_row(output_csv: Path, row: dict) -> None:
     )
 
 
+def _iso_now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def _update_manifest_row(model_name: str, **updates) -> None:
+    """매니페스트 CSV의 해당 model_name 행 in-place 업데이트."""
+    df = pd.read_csv(MANIFEST_PATH, keep_default_na=False)
+    mask = df["model_name"] == model_name
+    if not mask.any():
+        print(f"  [warn] manifest row {model_name!r} not found; skipping update")
+        return
+    for col, val in updates.items():
+        if col not in df.columns:
+            print(f"  [warn] manifest column {col!r} not in schema; skipping")
+            continue
+        df.loc[mask, col] = val
+    df.to_csv(MANIFEST_PATH, index=False)
+
+
 def process_csv(
     model: LLM,
     hf_model: str,
@@ -345,6 +365,7 @@ def process_csv(
     print(f"  done: success={n_success}, fail={n_fail}")
     if failed_ids:
         print(f"  failed_ids: {failed_ids}")
+    return {"n_success": n_success, "n_fail": n_fail, "failed_ids": failed_ids}
 
 
 # =================================
@@ -437,6 +458,8 @@ def main():
         print(f"  output     = {output_csv}")
         print(f"{'='*60}")
 
+        _update_manifest_row(name, status="in_progress", started_at=_iso_now())
+
         print(f"\n[1/3] 모델 로딩 중...")
         try:
             model = load_model(
@@ -449,16 +472,28 @@ def main():
         except Exception as e:
             print(f"✗ 모델 '{hf_model}' 로딩 실패. 다음 모델로 진행합니다.")
             print(f"  오류: {e}")
+            _update_manifest_row(name, status="failed", finished_at=_iso_now())
             continue
         print(f"✓ 모델 준비 완료")
 
         print(f"\n[2/3] 답변 생성 시작...")
+        result = {"n_success": 0, "n_fail": 0}
         try:
-            process_csv(model, hf_model, dataset, output_csv, max_tok)
+            result = process_csv(model, hf_model, dataset, output_csv, max_tok) or result
         except Exception as e:
             print(f"✗ {name} 처리 중 오류: {e}")
             import traceback
             traceback.print_exc()
+            _update_manifest_row(name, status="failed", finished_at=_iso_now())
+        else:
+            final_done = len(_load_done_ids(output_csv))
+            status = "done" if result.get("n_fail", 0) == 0 else "partial"
+            _update_manifest_row(
+                name,
+                status=status,
+                finished_at=_iso_now(),
+                n_rows_done=final_done,
+            )
 
         print(f"\n[3/3] 모델 메모리 해제 중...")
         del model
