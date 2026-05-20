@@ -263,18 +263,30 @@ def _iso_now() -> str:
 
 
 def _update_manifest_row(model_name: str, **updates) -> None:
-    """매니페스트 CSV의 해당 model_name 행 in-place 업데이트."""
-    df = pd.read_csv(MANIFEST_PATH, keep_default_na=False)
-    mask = df["model_name"] == model_name
-    if not mask.any():
-        print(f"  [warn] manifest row {model_name!r} not found; skipping update")
-        return
-    for col, val in updates.items():
-        if col not in df.columns:
-            print(f"  [warn] manifest column {col!r} not in schema; skipping")
-            continue
-        df.loc[mask, col] = val
-    df.to_csv(MANIFEST_PATH, index=False)
+    """매니페스트 CSV의 해당 model_name 행 in-place 업데이트.
+
+    여러 워커가 동시 호출하면 read-modify-write 사이에 다른 워커가
+    truncate-then-rewrite 중인 CSV를 읽고 pandas.EmptyDataError를 낸다.
+    별도 .lock 파일에 fcntl.flock(LOCK_EX)을 걸어 직렬화한다.
+    """
+    import fcntl
+    lock_path = str(MANIFEST_PATH) + ".lock"
+    with open(lock_path, "w") as lock_f:
+        fcntl.flock(lock_f.fileno(), fcntl.LOCK_EX)
+        try:
+            df = pd.read_csv(MANIFEST_PATH, keep_default_na=False)
+            mask = df["model_name"] == model_name
+            if not mask.any():
+                print(f"  [warn] manifest row {model_name!r} not found; skipping update")
+                return
+            for col, val in updates.items():
+                if col not in df.columns:
+                    print(f"  [warn] manifest column {col!r} not in schema; skipping")
+                    continue
+                df.loc[mask, col] = val
+            df.to_csv(MANIFEST_PATH, index=False)
+        finally:
+            fcntl.flock(lock_f.fileno(), fcntl.LOCK_UN)
 
 
 def process_csv(
@@ -283,6 +295,7 @@ def process_csv(
     dataset: pd.DataFrame,
     output_csv: Path,
     max_tokens: int,
+    think_mode: bool = False,
 ):
     """
     매니페스트 기반: dataset DataFrame을 받아 모델로 답변 생성하고 행 단위로 append.
@@ -293,6 +306,7 @@ def process_csv(
         dataset: 입력 데이터셋 DataFrame (이미 로드됨)
         output_csv: 출력 CSV 경로 (resume 시 append됨)
         max_tokens: 모델별 max_tokens (매니페스트에서)
+        think_mode: True면 Qwen3 등 hybrid think 모델에 enable_thinking=True 전달
     """
     sampling_params = SamplingParams(
         temperature=0.7,
@@ -338,7 +352,20 @@ def process_csv(
         ))
 
     n_pending = len(pending_prompts)
-    print(f"  vLLM batched generate: {n_pending} prompts (max_tokens={max_tokens})")
+    print(f"  vLLM batched chat: {n_pending} prompts (max_tokens={max_tokens}, think_mode={think_mode})")
+
+    # Build chat messages so vLLM applies the model's chat template (this is
+    # what previously was missing — raw text bypassed the template and broke
+    # reasoning models like SolarOpen and Qwen3-Thinking).
+    pending_messages = [
+        [{"role": "user", "content": prompt}] for prompt in pending_prompts
+    ]
+    chat_kwargs = {"sampling_params": sampling_params}
+    if think_mode:
+        # Qwen3-A3B family supports an explicit enable_thinking switch; for
+        # models that ignore unknown kwargs (Phi-4-reasoning, DeepSeek-R1)
+        # this is a no-op.
+        chat_kwargs["chat_template_kwargs"] = {"enable_thinking": True}
 
     n_success = 0
     n_fail = len(skipped_rows)
@@ -346,11 +373,23 @@ def process_csv(
 
     if n_pending:
         try:
-            outputs = model.generate(pending_prompts, sampling_params)
+            outputs = model.chat(pending_messages, **chat_kwargs)
         except Exception as e:
-            print(f"  generation failed: {e}")
-            return {"n_success": 0, "n_fail": n_pending + n_fail,
-                    "failed_ids": [m["id"] for m in pending_meta] + failed_ids}
+            # Fallback: some chat templates reject enable_thinking kwarg.
+            # Drop it and retry once.
+            if "chat_template_kwargs" in chat_kwargs:
+                print(f"  chat() with chat_template_kwargs failed ({e}); retrying without")
+                chat_kwargs.pop("chat_template_kwargs", None)
+                try:
+                    outputs = model.chat(pending_messages, **chat_kwargs)
+                except Exception as e2:
+                    print(f"  generation failed: {e2}")
+                    return {"n_success": 0, "n_fail": n_pending + n_fail,
+                            "failed_ids": [m["id"] for m in pending_meta] + failed_ids}
+            else:
+                print(f"  generation failed: {e}")
+                return {"n_success": 0, "n_fail": n_pending + n_fail,
+                        "failed_ids": [m["id"] for m in pending_meta] + failed_ids}
 
         for meta, req_out in tqdm(
             zip(pending_meta, outputs), total=n_pending,
@@ -363,6 +402,8 @@ def process_csv(
                     "backend": "vllm",
                     "hf_model": hf_model,
                     "max_tokens": max_tokens,
+                    "think_mode": think_mode,
+                    "chat_template_applied": True,
                     "finish_reason": getattr(out, "finish_reason", None),
                     "stop_reason": getattr(out, "stop_reason", None),
                     "n_generated_tokens": len(getattr(out, "token_ids", []) or []),
@@ -467,11 +508,14 @@ def main():
         name = str(mrow["model_name"])
         hf_model = str(mrow["backend_id"])
         max_tok = int(mrow["max_output_tokens"])
+        # manifest think_mode 컬럼: "yes" / "no" / "" — chat template enable_thinking 분기에 사용
+        think_mode = str(mrow.get("think_mode", "")).strip().lower() == "yes"
         output_csv = REPO_ROOT / str(mrow["output_csv"])
 
         print(f"\n{'='*60}")
         print(f"[모델 {model_idx}/{total_models}] {name}  ({hf_model})")
         print(f"  max_tokens = {max_tok}")
+        print(f"  think_mode = {think_mode}")
         print(f"  output     = {output_csv}")
         print(f"{'='*60}")
 
@@ -496,7 +540,7 @@ def main():
         print(f"\n[2/3] 답변 생성 시작...")
         result = {"n_success": 0, "n_fail": 0}
         try:
-            result = process_csv(model, hf_model, dataset, output_csv, max_tok) or result
+            result = process_csv(model, hf_model, dataset, output_csv, max_tok, think_mode=think_mode) or result
         except Exception as e:
             print(f"✗ {name} 처리 중 오류: {e}")
             import traceback
