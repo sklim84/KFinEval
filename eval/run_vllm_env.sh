@@ -15,8 +15,12 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SHIM_DIR="$REPO_ROOT/eval/_vllm_shim"
+EVAL_PYLIB="$REPO_ROOT/eval/_eval_pylib"
 
-export PYTHONPATH="$SHIM_DIR:/home/work/.local/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}"
+# EVAL_PYLIB carries newer transformers (5.5.1) + huggingface_hub (1.15.0) so
+# eval can load architectures (e.g. ExaoneMoE) that system transformers 4.57.1
+# does not recognize. Order: shim → eval-only deps → user-local torch/vllm.
+export PYTHONPATH="$SHIM_DIR:$EVAL_PYLIB:/home/work/.local/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}"
 
 # Force vLLM to a backend that does not require flash_attn.
 export VLLM_ATTENTION_BACKEND="${VLLM_ATTENTION_BACKEND:-TRITON_ATTN}"

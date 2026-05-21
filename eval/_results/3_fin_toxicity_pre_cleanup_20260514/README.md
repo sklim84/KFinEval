@@ -30,4 +30,4 @@ file:   _datasets/0_integration/3_fin_toxicity.csv  (100 data rows)
 
 This directory should remain a frozen snapshot. If a comparison utility
 is needed (e.g. score-delta plots), the rerun manifest at
-`../../3_fin_toxicity_rerun_manifest.csv` is the canonical pointer.
+`../../3_fin_toxicity_manifest.csv` is the canonical pointer.

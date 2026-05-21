@@ -12,3 +12,10 @@ eval/logs/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Eval-only Python deps (transformers 5.5.1 etc. for ExaoneMoE arch loading)
+# Installed via `pip install transformers==5.5.1 -t eval/_eval_pylib`
+eval/_eval_pylib/
+
+# fcntl manifest lock files (created at runtime, never committed)
+*.lock

@@ -1,7 +1,7 @@
 """
 유해성 응답 생성 스크립트 (OpenRouter 사용)
 
-매니페스트(eval/3_fin_toxicity_rerun_manifest.csv) 기반으로 OpenRouter 백엔드의
+매니페스트(eval/3_fin_toxicity_manifest.csv) 기반으로 OpenRouter 백엔드의
 모델 응답을 생성한다. 행 단위 idempotent resume, per-row raw_response 보존,
 모델별 max_output_tokens / reasoning_effort 분기, dataset SHA256 검증을 지원한다.
 
@@ -35,7 +35,7 @@ from openai import OpenAI, APIError
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVAL_DIR = Path(__file__).resolve().parent
 ENV_PATH = REPO_ROOT / ".env"
-MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_rerun_manifest.csv"
+MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_manifest.csv"
 DATASET_PATH = REPO_ROOT / "_datasets" / "0_integration" / "3_fin_toxicity.csv"
 
 load_dotenv(ENV_PATH)

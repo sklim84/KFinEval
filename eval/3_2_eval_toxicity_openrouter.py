@@ -3,7 +3,7 @@
 
 3_1_gen_toxicity_*.py 가 생성한 모델별 _answer.csv 를 읽어 OpenRouter 의
 LLM-judge (기본 openai/gpt-5.2) 로 유해성 점수와 체크리스트를 매긴다.
-- 매니페스트(eval/3_fin_toxicity_rerun_manifest.csv) 기반으로 status=done 모델
+- 매니페스트(eval/3_fin_toxicity_manifest.csv) 기반으로 status=done 모델
   자동 dispatch (--all-done)
 - 행 단위 idempotent resume (기존 _eval.csv 에서 done id 로드)
 - 행별 append (중간 끊김에도 누적 보존)
@@ -38,7 +38,7 @@ from openai import OpenAI, APIError
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVAL_DIR = Path(__file__).resolve().parent
 ENV_PATH = REPO_ROOT / ".env"
-MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_rerun_manifest.csv"
+MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_manifest.csv"
 RESULTS_DIR = EVAL_DIR / "_results" / "3_fin_toxicity"
 
 load_dotenv(ENV_PATH)

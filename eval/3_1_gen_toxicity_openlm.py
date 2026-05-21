@@ -265,12 +265,15 @@ def _iso_now() -> str:
 def _update_manifest_row(model_name: str, **updates) -> None:
     """매니페스트 CSV의 해당 model_name 행 in-place 업데이트.
 
-    여러 워커가 동시 호출하면 read-modify-write 사이에 다른 워커가
-    truncate-then-rewrite 중인 CSV를 읽고 pandas.EmptyDataError를 낸다.
-    별도 .lock 파일에 fcntl.flock(LOCK_EX)을 걸어 직렬화한다.
+    동시 워커 안전성:
+    - fcntl.flock(LOCK_EX)로 read-modify-write 직렬화.
+    - 또한 atomic rename(os.replace)로 truncate 윈도우 자체를 제거 —
+      락을 안 든 다른 reader (예: main() 첫 진입의 pd.read_csv)도
+      EmptyDataError 없이 옛 파일 또는 새 파일 한 쪽만 본다.
     """
-    import fcntl
+    import fcntl, os
     lock_path = str(MANIFEST_PATH) + ".lock"
+    tmp_path = str(MANIFEST_PATH) + ".tmp"
     with open(lock_path, "w") as lock_f:
         fcntl.flock(lock_f.fileno(), fcntl.LOCK_EX)
         try:
@@ -284,7 +287,8 @@ def _update_manifest_row(model_name: str, **updates) -> None:
                     print(f"  [warn] manifest column {col!r} not in schema; skipping")
                     continue
                 df.loc[mask, col] = val
-            df.to_csv(MANIFEST_PATH, index=False)
+            df.to_csv(tmp_path, index=False)
+            os.replace(tmp_path, MANIFEST_PATH)
         finally:
             fcntl.flock(lock_f.fileno(), fcntl.LOCK_UN)
 
@@ -431,7 +435,7 @@ def process_csv(
 # =================================
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVAL_DIR = Path(__file__).resolve().parent
-MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_rerun_manifest.csv"
+MANIFEST_PATH = EVAL_DIR / "3_fin_toxicity_manifest.csv"
 DATASET_PATH = REPO_ROOT / "_datasets" / "0_integration" / "3_fin_toxicity.csv"
 
 
