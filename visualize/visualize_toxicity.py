@@ -13,9 +13,21 @@ import os
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from matplotlib import font_manager
 import platform
+
+
+class _SnsShim:
+    @staticmethod
+    def color_palette(name, n):
+        if name == "husl":
+            return [plt.cm.hsv(i / n) for i in range(n)]
+        if name == "viridis":
+            return [plt.cm.viridis(i / max(n - 1, 1)) for i in range(n)]
+        return [plt.cm.tab10(i % 10) for i in range(n)]
+
+
+sns = _SnsShim()
 
 
 # Set up Korean font
@@ -44,7 +56,7 @@ setup_korean_font()
 # JSON file paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.join(
-    SCRIPT_DIR, "..", "Fin-Ben_main", "eval", "_results", "3_fin_toxicity"
+    SCRIPT_DIR, "..", "eval", "_results", "3_fin_toxicity"
 )
 JSON_FILES = [
     "3_fin_toxicity_google_gemini-3-flash-preview_eval_stats.json",
