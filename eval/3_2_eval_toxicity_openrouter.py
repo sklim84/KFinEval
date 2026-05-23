@@ -99,6 +99,20 @@ EVAL_JSON_SCHEMA = {
     },
 }
 
+
+# Anthropic/Llama-compatible variant: same shape, but without numeric-range
+# and string-length validators (Anthropic's structured-output validator does
+# not accept "minimum"/"maximum" on integers or "maxLength" on strings).
+def _to_lenient_schema(schema: dict) -> dict:
+    import copy
+    s = copy.deepcopy(schema)
+    s["schema"]["properties"]["score"] = {"type": "integer"}
+    s["schema"]["properties"]["reasoning"] = {"type": "string"}
+    return s
+
+
+EVAL_JSON_SCHEMA_LENIENT = _to_lenient_schema(EVAL_JSON_SCHEMA)
+
 OUTPUT_COLUMNS = [
     "id", "category", "attck_method", "is_complete_question",
     "question", "source_news_title", "source_news_content",
@@ -208,6 +222,8 @@ def build_user_prompt(category: str, question: str, answer: str) -> str:
 
 def build_request_kwargs(judge_model: str, prompt: str, max_output_tokens: int) -> dict:
     """OpenRouter chat.completions 호출 인자."""
+    is_openai = judge_model.startswith("openai/")
+    schema = EVAL_JSON_SCHEMA if is_openai else EVAL_JSON_SCHEMA_LENIENT
     kwargs = {
         "model": judge_model,
         "messages": [
@@ -222,10 +238,10 @@ def build_request_kwargs(judge_model: str, prompt: str, max_output_tokens: int) 
             {"role": "user", "content": prompt},
         ],
         "max_tokens": max_output_tokens,
-        "response_format": {"type": "json_schema", "json_schema": EVAL_JSON_SCHEMA},
+        "response_format": {"type": "json_schema", "json_schema": schema},
     }
     # reasoning.effort is OpenAI-specific; do not send to Claude/Llama/etc.
-    if judge_model.startswith("openai/"):
+    if is_openai:
         kwargs["extra_body"] = {"reasoning": {"effort": "none"}}
     return kwargs
 
@@ -408,6 +424,9 @@ def main():
                         help="judge 응답 max_tokens (기본 2048; 한국어 reasoning 여유)")
     parser.add_argument("--limit", type=int, default=None,
                         help="대상 _answer.csv 의 첫 N 행만 평가 (드라이런)")
+    parser.add_argument("--output-suffix", default="",
+                        help="output filename suffix, e.g. 'claude' -> _eval_claude.csv "
+                             "(default: empty -> _eval.csv)")
     args = parser.parse_args()
     if not args.target_model and not args.all_done:
         parser.error("specify --target-model NAME or --all-done")
@@ -438,7 +457,8 @@ def main():
         name = str(mrow["model_name"])
         # 답변 / 평가 파일 경로 (output_csv 컬럼 사용)
         answer_csv = REPO_ROOT / str(mrow["output_csv"])
-        eval_csv = answer_csv.parent / answer_csv.name.replace("_answer.csv", "_eval.csv")
+        suffix_tag = f"_{args.output_suffix}" if args.output_suffix else ""
+        eval_csv = answer_csv.parent / answer_csv.name.replace("_answer.csv", f"_eval{suffix_tag}.csv")
 
         try:
             r = process_target_model(
