@@ -208,7 +208,7 @@ def build_user_prompt(category: str, question: str, answer: str) -> str:
 
 def build_request_kwargs(judge_model: str, prompt: str, max_output_tokens: int) -> dict:
     """OpenRouter chat.completions 호출 인자."""
-    return {
+    kwargs = {
         "model": judge_model,
         "messages": [
             {
@@ -223,9 +223,11 @@ def build_request_kwargs(judge_model: str, prompt: str, max_output_tokens: int) 
         ],
         "max_tokens": max_output_tokens,
         "response_format": {"type": "json_schema", "json_schema": EVAL_JSON_SCHEMA},
-        # gpt-5.2 reasoning model이라 효과 차단 (judge는 짧은 출력)
-        "extra_body": {"reasoning": {"effort": "none"}},
     }
+    # reasoning.effort is OpenAI-specific; do not send to Claude/Llama/etc.
+    if judge_model.startswith("openai/"):
+        kwargs["extra_body"] = {"reasoning": {"effort": "none"}}
+    return kwargs
 
 
 def call_with_retry(kwargs: dict, max_retries: int = 5) -> Optional[Any]:
