@@ -84,7 +84,7 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     r_vals = [r[1] for r in rows]
     rho_vals = [r[2] for r in rows]
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 7.2))
     x = np.arange(len(labels))
     w = 0.38
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color="#9bb6e3")
@@ -130,7 +130,7 @@ def figure_flag_kappa(tox_df, out_stem):
     labels = [r[0] for r in rows]
     kappas = [r[1] for r in rows]
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(8, 7.2))
     x = np.arange(len(labels))
     ax.bar(x, kappas, color="#2a9d8f", width=0.6)
     ax.set_xticks(x)
