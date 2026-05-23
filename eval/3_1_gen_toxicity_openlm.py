@@ -299,7 +299,7 @@ def process_csv(
     dataset: pd.DataFrame,
     output_csv: Path,
     max_tokens: int,
-    think_mode: bool = False,
+    think_mode: str = "",
 ):
     """
     매니페스트 기반: dataset DataFrame을 받아 모델로 답변 생성하고 행 단위로 append.
@@ -310,7 +310,8 @@ def process_csv(
         dataset: 입력 데이터셋 DataFrame (이미 로드됨)
         output_csv: 출력 CSV 경로 (resume 시 append됨)
         max_tokens: 모델별 max_tokens (매니페스트에서)
-        think_mode: True면 Qwen3 등 hybrid think 모델에 enable_thinking=True 전달
+        think_mode: "yes" / "no" / "" — Qwen3 등 hybrid think 모델에
+                    각각 enable_thinking={True,False,not passed}로 전달
     """
     sampling_params = SamplingParams(
         temperature=0.7,
@@ -365,11 +366,13 @@ def process_csv(
         [{"role": "user", "content": prompt}] for prompt in pending_prompts
     ]
     chat_kwargs = {"sampling_params": sampling_params}
-    if think_mode:
+    if think_mode == "yes":
         # Qwen3-A3B family supports an explicit enable_thinking switch; for
         # models that ignore unknown kwargs (Phi-4-reasoning, DeepSeek-R1)
         # this is a no-op.
         chat_kwargs["chat_template_kwargs"] = {"enable_thinking": True}
+    elif think_mode == "no":
+        chat_kwargs["chat_template_kwargs"] = {"enable_thinking": False}
 
     n_success = 0
     n_fail = len(skipped_rows)
@@ -513,7 +516,9 @@ def main():
         hf_model = str(mrow["backend_id"])
         max_tok = int(mrow["max_output_tokens"])
         # manifest think_mode 컬럼: "yes" / "no" / "" — chat template enable_thinking 분기에 사용
-        think_mode = str(mrow.get("think_mode", "")).strip().lower() == "yes"
+        think_mode = str(mrow.get("think_mode", "")).strip().lower()
+        if think_mode not in ("yes", "no", ""):
+            think_mode = ""
         output_csv = REPO_ROOT / str(mrow["output_csv"])
 
         print(f"\n{'='*60}")
