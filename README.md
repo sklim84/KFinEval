@@ -2,8 +2,8 @@
 
 ## Project Overview
 
-We introduce KFinEval, a benchmark suite for evaluating large language models (LLMs) in the Korean financial domain. Most existing financial benchmarks are English-centric and emphasize numerical or surface-level reasoning, limiting their ability to assess regulation-grounded decision-making and domain-specific safety. KFinEval addresses these gaps with over 1K expert-curated instances spanning three dimensions: foundational financial knowledge, regulation-grounded procedural reasoning under noisy contexts, and financial toxicity under adversarial prompts.
-We evaluate a diverse set of proprietary and open-source LLMs and observe substantial performance disparities across domains, revealing trade-offs between knowledge accuracy, procedural reasoning capability, and safety-aligned behavior. Notably, strong performance in proprietary models does not consistently translate into safer responses under adversarial financial scenarios. These results highlight challenges in deploying LLMs for high-stakes financial applications. Grounded in real-world Korean financial regulations and market contexts, KFinEval provides a practical benchmark for diagnosing and improving the reliability and safety of financial LLMs.
+We introduce KFinEval, a benchmark suite for evaluating large language models (LLMs) in the Korean financial domain. Most existing financial benchmarks are English-centric and emphasize numerical or surface-level reasoning, limiting their ability to assess regulation-grounded decision-making and domain-specific safety. KFinEval addresses these gaps with about 1K expert-curated instances spanning three dimensions: foundational financial knowledge, regulation-grounded procedural reasoning under noisy contexts, and financial toxicity under adversarial prompts.
+We evaluate a diverse set of proprietary and open-weight LLMs and observe substantial performance disparities across domains, revealing trade-offs between knowledge accuracy, procedural reasoning capability, and safety-aligned behavior. Notably, strong performance in proprietary models does not consistently translate into safer responses under adversarial financial scenarios. These results highlight challenges in deploying LLMs for high-stakes financial applications. Grounded in real-world Korean financial regulations and market contexts, KFinEval provides a practical benchmark for diagnosing and improving the reliability and safety of financial LLMs.
 
 ## Directory Structure
 
@@ -50,7 +50,7 @@ KFinEval/
 
 **Output Format**:
 - Response file: `_results/1_fin_knowledge/1_fin_knowledge_{model}_response.csv`
-- Statistics file: `_results/1_fin_knowledge/1_fin_knowledge_{model}_stats.json`
+- Statistics file: `_results/1_fin_knowledge/1_fin_knowledge_{model}_response_stats.json`
 
 **Evaluation Metrics**:
 - Overall accuracy
@@ -71,6 +71,7 @@ KFinEval/
 - `2_1_gen_reasoning_openai.py`: Reasoning response generation using OpenAI API
 - `2_1_gen_reasoning_claude.py`: Reasoning response generation using Anthropic Claude API
 - `2_2_eval_reasoning_openai.py`: Reasoning response evaluation using OpenAI API (LLM-as-a-Judge)
+- `2_2_eval_reasoning_openrouter.py`: Reasoning response evaluation via OpenRouter (LLM-as-a-Judge; default judge `openai/gpt-5.2`, also Claude/Llama)
 - `2_3_stats_eval_reasoning.py`: Statistics calculation
 
 **Output Format**:
@@ -98,8 +99,10 @@ KFinEval/
 **Scripts**:
 - `3_1_gen_toxicity_openlm.py`: Toxicity response generation using vLLM
 - `3_1_gen_toxicity_openai.py`: Toxicity response generation using OpenAI API
+- `3_1_gen_toxicity_openrouter.py`: Toxicity response generation via OpenRouter
 - `3_1_gen_toxicity_claude.py`: Toxicity response generation using Anthropic Claude API
 - `3_2_eval_toxicity_openai.py`: Toxicity evaluation using OpenAI API (LLM-as-a-Judge)
+- `3_2_eval_toxicity_openrouter.py`: Toxicity evaluation via OpenRouter (LLM-as-a-Judge)
 - `3_3_stats_eval_toxicity.py`: Statistics calculation
 
 **Output Format**:
@@ -163,9 +166,11 @@ Evaluate generated responses (Financial Knowledge only requires answer compariso
 ```bash
 # Financial Reasoning evaluation
 python eval/2_2_eval_reasoning_openai.py
+python eval/2_2_eval_reasoning_openrouter.py --target-model <model> --judge-model openai/gpt-5.2
 
 # Financial Toxicity evaluation
 python eval/3_2_eval_toxicity_openai.py
+python eval/3_2_eval_toxicity_openrouter.py
 ```
 
 #### Step 3: Calculate Statistics
@@ -238,6 +243,11 @@ The `aug/` directory contains scripts for dataset augmentation.
 - Messages API
 - Prompt-based response generation (for Reasoning, Toxicity evaluation)
 
+### OpenRouter-based Evaluation (`*_openrouter.py`)
+- Unified access to many hosted models (Gemini, Grok, Llama, gpt-oss, etc.) for both generation and LLM-as-a-Judge
+- Chat Completions API with row-level idempotent resume
+- Default judge `openai/gpt-5.2`; supports multi-judge agreement (e.g., claude-opus-4.5, llama-3.1-70b-instruct)
+
 ### Direct Transformers Usage (`*_gpt*.py`)
 - GPT-OSS model specific
 - Multi-GPU support with device_map="auto"
@@ -273,6 +283,10 @@ pip install -r requirements.txt
 **Anthropic API Key**:
 - Set `ANTHROPIC_API_KEY` in `eval/.env` file
 - For Claude API evaluation
+
+**OpenRouter API Key**:
+- Set `OPENROUTER_API_KEY` in `eval/.env` file
+- For OpenRouter-based generation and LLM-as-a-Judge (gpt-5.2, Claude, Llama, Gemini, Grok, etc.)
 
 ### Cache Settings
 
