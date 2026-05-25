@@ -32,6 +32,10 @@ REA_CSV = RESULTS_DIR / "expert_eval_reasoning_gpt-5.2_reasoning.csv"
 BIN_EDGES = [0.5, 3.5, 6.5, 10.5]
 BIN_LABELS = ["Low", "Mid", "High"]
 
+# Shared figure geometry so all four panels render with the same axes box.
+PANEL_FIGSIZE = (8, 7.2)
+PANEL_ADJUST = dict(left=0.16, right=0.97, bottom=0.32, top=0.97)
+
 
 def _num(series):
     return pd.to_numeric(series, errors="coerce")
@@ -84,20 +88,21 @@ def figure_alignment_scores(tox_df, rea_df, out_stem):
     r_vals = [r[1] for r in rows]
     rho_vals = [r[2] for r in rows]
 
-    fig, ax = plt.subplots(figsize=(8, 7.2))
+    fig, ax = plt.subplots(figsize=PANEL_FIGSIZE)
     x = np.arange(len(labels))
     w = 0.38
     ax.bar(x - w / 2, r_vals, w, label="Pearson r", color="#9bb6e3")
     ax.bar(x + w / 2, rho_vals, w, label="Spearman ρ", color="#f5a978")
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right")
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=18)
+    ax.tick_params(axis="y", labelsize=18)
     ax.set_ylim(0, 1.05)
-    ax.legend(loc="upper left", fontsize=10, frameon=True)
+    ax.legend(loc="upper left", fontsize=18, frameon=True)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    plt.tight_layout()
+    fig.subplots_adjust(**PANEL_ADJUST)
 
-    plt.savefig(f"{out_stem}.png", dpi=150, bbox_inches="tight")
-    plt.savefig(f"{out_stem}.pdf", bbox_inches="tight")
+    plt.savefig(f"{out_stem}.png", dpi=150)
+    plt.savefig(f"{out_stem}.pdf")
     plt.close()
     print(f"Saved: {out_stem}.png / .pdf")
     return rows
@@ -130,17 +135,18 @@ def figure_flag_kappa(tox_df, out_stem):
     labels = [r[0] for r in rows]
     kappas = [r[1] for r in rows]
 
-    fig, ax = plt.subplots(figsize=(8, 7.2))
+    fig, ax = plt.subplots(figsize=PANEL_FIGSIZE)
     x = np.arange(len(labels))
     ax.bar(x, kappas, color="#2a9d8f", width=0.6)
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=45, ha="right")
+    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=18)
+    ax.tick_params(axis="y", labelsize=18)
     ax.set_ylim(0, 1.05)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
-    plt.tight_layout()
+    fig.subplots_adjust(**PANEL_ADJUST)
 
-    plt.savefig(f"{out_stem}.png", dpi=150, bbox_inches="tight")
-    plt.savefig(f"{out_stem}.pdf", bbox_inches="tight")
+    plt.savefig(f"{out_stem}.png", dpi=150)
+    plt.savefig(f"{out_stem}.pdf")
     plt.close()
     print(f"Saved: {out_stem}.png / .pdf")
     return rows
@@ -169,10 +175,10 @@ def _plot_confusion(ax, cm, title=None):
     ax.imshow(cm, cmap="Blues", aspect="auto")
     ax.set_xticks(range(3))
     ax.set_yticks(range(3))
-    ax.set_xticklabels(BIN_LABELS)
-    ax.set_yticklabels(BIN_LABELS)
-    ax.set_xlabel("LLM Prediction")
-    ax.set_ylabel("Human Score")
+    ax.set_xticklabels(BIN_LABELS, fontsize=18)
+    ax.set_yticklabels(BIN_LABELS, fontsize=18)
+    ax.set_xlabel("LLM Prediction", fontsize=18)
+    ax.set_ylabel("Human Score", fontsize=18)
     if title:
         ax.set_title(title, fontsize=13, fontweight="bold")
     max_v = cm.max() if cm.size else 0
@@ -180,15 +186,15 @@ def _plot_confusion(ax, cm, title=None):
         for j in range(3):
             color = "white" if cm[i, j] > max_v * 0.5 else "black"
             ax.text(j, i, str(int(cm[i, j])), ha="center", va="center",
-                    color=color, fontsize=11)
+                    color=color, fontsize=22)
 
 
 def _save_single_confusion(cm, out_stem):
-    fig, ax = plt.subplots(figsize=(5, 4.5))
+    fig, ax = plt.subplots(figsize=PANEL_FIGSIZE)
     _plot_confusion(ax, cm)
-    plt.tight_layout()
-    plt.savefig(f"{out_stem}.png", dpi=150, bbox_inches="tight")
-    plt.savefig(f"{out_stem}.pdf", bbox_inches="tight")
+    fig.subplots_adjust(**PANEL_ADJUST)
+    plt.savefig(f"{out_stem}.png", dpi=150)
+    plt.savefig(f"{out_stem}.pdf")
     plt.close()
     print(f"Saved: {out_stem}.png / .pdf")
 

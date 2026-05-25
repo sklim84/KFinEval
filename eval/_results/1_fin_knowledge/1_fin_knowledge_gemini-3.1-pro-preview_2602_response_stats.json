@@ -1,0 +1,994 @@
+{
+  "model": "gemini-3.1-pro-preview",
+  "total_questions": 296,
+  "correct_answers": 289,
+  "wrong_answers": 7,
+  "accuracy": 97.64,
+  "accuracy_percentage": "97.64%",
+  "by_category": [
+    {
+      "category": "중급회계",
+      "total": 34,
+      "correct": 34,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "생산운영관리",
+      "total": 33,
+      "correct": 33,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "재무관리",
+      "total": 39,
+      "correct": 38,
+      "wrong": 1,
+      "accuracy": 97.44,
+      "accuracy_percentage": "97.44%"
+    },
+    {
+      "category": "미시경제학",
+      "total": 19,
+      "correct": 19,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "계량경제",
+      "total": 20,
+      "correct": 20,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "거시경제학",
+      "total": 20,
+      "correct": 20,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "국제경제학",
+      "total": 29,
+      "correct": 28,
+      "wrong": 1,
+      "accuracy": 96.55,
+      "accuracy_percentage": "96.55%"
+    },
+    {
+      "category": "화폐금융",
+      "total": 30,
+      "correct": 30,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "디지털 금융",
+      "total": 16,
+      "correct": 16,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "채권시장",
+      "total": 10,
+      "correct": 8,
+      "wrong": 2,
+      "accuracy": 80.0,
+      "accuracy_percentage": "80.00%"
+    },
+    {
+      "category": "국제금융정책",
+      "total": 3,
+      "correct": 3,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "증권시장",
+      "total": 8,
+      "correct": 8,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "보험상품",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "금융기관",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "금융상품",
+      "total": 11,
+      "correct": 8,
+      "wrong": 3,
+      "accuracy": 72.73,
+      "accuracy_percentage": "72.73%"
+    },
+    {
+      "category": "유통시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "파생상품",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "금융의 기초",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "세법",
+      "total": 7,
+      "correct": 7,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "category": "부동산시장",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    }
+  ],
+  "by_level": [
+    {
+      "level": "H",
+      "total": 296,
+      "correct": 289,
+      "wrong": 7,
+      "accuracy": 97.64,
+      "accuracy_percentage": "97.64%"
+    }
+  ],
+  "by_sub_category": [
+    {
+      "sub_category": "재무제표 표시",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "자본 및 자본유지개념",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재무정보의 질적특성",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재무제표 요소",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "보고기간 후 사건",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "중간재무제표",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재고자산",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "유형자산",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "무형자산",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "차입원가자본화",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "투자부동산",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "금융자산",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "금융부채",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "충당부채",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "복합금융상품",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "수익",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "자본",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "종업원급여",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "주식기준보상",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "법인세회계",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "주당이익",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "오류수정",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "리스",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재무비율분석",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산성",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "현금흐름표",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "품질비용",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "수요예측",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "제품수명주기",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "제품설계",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "신제품개발",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산기술",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "공정선정",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "지분법회계",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재고관리",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "경제성분석",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "의사결정나무",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산능력계획",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "시설배치",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "프로젝트관리",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산주기",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "공급사슬관리",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "제품및서비스설계",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "설비배치",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "총괄생산계획",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "서비스프로세스",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "작업측정",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "프로세스분석",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "대기행렬",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "식스시그마",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "린생산시스템",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "품질관리",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "현금흐름추정",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "투자안평가",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "포트폴리오",
+      "total": 3,
+      "correct": 3,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "CAPM",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "APT",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "자본비용",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "자본구조",
+      "total": 3,
+      "correct": 3,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "재무비율",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "채권",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "자본구조와 효율적시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "주식",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "레버리지",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "기업가치평가",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "배당",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "운전자본관리",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "선물",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "옵션",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "금융시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "국제재무",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "수요공급이론",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "소비자이론",
+      "total": 4,
+      "correct": 4,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "현시선호이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "소비자선택",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "기대효용이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산자이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "독점시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "비용이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "과점시장",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "완전경쟁시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "생산요소시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "복점시장",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "시장실패",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "단순 회귀 모형",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "확률변수",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "통계적 검정",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "회귀모형 이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "신뢰구간",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "일반균형이론",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "회귀식의 활용",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "다중회귀분석",
+      "total": 2,
+      "correct": 2,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "통계적 검정법",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "비선형 회귀모형",
+      "total": 6,
+      "correct": 6,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "수요곡선 추정",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": "선형 확률 모형",
+      "total": 1,
+      "correct": 1,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    },
+    {
+      "sub_category": NaN,
+      "total": 0,
+      "correct": 0,
+      "wrong": 0,
+      "accuracy": 0.0,
+      "accuracy_percentage": "0.00%"
+    }
+  ],
+  "by_has_table": [
+    {
+      "has_table": "N",
+      "total": 269,
+      "correct": 262,
+      "wrong": 7,
+      "accuracy": 97.4,
+      "accuracy_percentage": "97.40%"
+    },
+    {
+      "has_table": "Y",
+      "total": 27,
+      "correct": 27,
+      "wrong": 0,
+      "accuracy": 100.0,
+      "accuracy_percentage": "100.00%"
+    }
+  ],
+  "by_has_formula": [
+    {
+      "has_formula": "N",
+      "total": 240,
+      "correct": 235,
+      "wrong": 5,
+      "accuracy": 97.92,
+      "accuracy_percentage": "97.92%"
+    },
+    {
+      "has_formula": "Y",
+      "total": 56,
+      "correct": 54,
+      "wrong": 2,
+      "accuracy": 96.43,
+      "accuracy_percentage": "96.43%"
+    }
+  ]
+}

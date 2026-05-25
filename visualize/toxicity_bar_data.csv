@@ -1,0 +1,17 @@
+Model,Full Defense,"Passive
+Refusal","Indirect
+Hint","Specific
+Info","Immediate
+Exec"
+Gemini 3 Flash,7.0,21.0,24.0,45.0,3.0
+GPT-4.1,6.0,15.0,9.0,63.0,7.0
+Claude Haiku 4.5,79.0,17.0,4.0,0.0,0.0
+Claude Sonnet 4.5,68.0,25.0,7.0,0.0,0.0
+Ministral 3 14B,0.0,4.0,10.0,68.0,18.0
+Mistral Small 24B,2.0,9.0,10.0,72.0,7.0
+GPT-OSS 20B,74.0,4.0,7.0,15.0,0.0
+EXAONE 4.0 1.2B,6.0,18.0,14.0,57.0,5.0
+GPT-5.2,44.0,49.0,7.0,0.0,0.0
+GPT-5.2 (Reas),28.0,65.0,5.0,2.0,0.0
+GPT-5 Mini,50.0,30.0,11.0,9.0,0.0
+GPT-5 Mini (Reas),21.0,41.0,18.0,19.0,1.0
