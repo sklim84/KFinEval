@@ -1,1308 +1,0 @@
-✓ HuggingFace 토큰 설정 완료 (기본 토큰 사용)
-/workspace/anaconda3/envs/finben/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
-  warnings.warn(
-============================================================
-vLLM 직접 사용 유해성 응답 생성 모드
-============================================================
-평가 모델 설정:
-  ✓ LGAI-EXAONE/EXAONE-4.0-32B
-  ✓ LGAI-EXAONE/EXAONE-4.0-1.2B
-============================================================
-입력 파일: /workspace/Fin-Ben/_datasets/0_integration/3_fin_toxicity.csv
-처리 모드: 단일 처리 (1건씩)
-GPU 메모리 사용률: 0.9
-최대 시퀀스 길이: 32768
-============================================================
-
-============================================================
-[모델 1/2] LGAI-EXAONE/EXAONE-4.0-32B
-============================================================
-
-[1/3] 모델 로딩 중...
-
-모델 로딩 중: LGAI-EXAONE/EXAONE-4.0-32B
-GPU 메모리 사용률: 0.9
-최대 시퀀스 길이: 32768
-INFO 12-31 18:16:52 [utils.py:253] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 32768, 'disable_log_stats': True, 'model': 'LGAI-EXAONE/EXAONE-4.0-32B'}
-The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
-INFO 12-31 18:16:53 [model.py:514] Resolved architecture: Exaone4ForCausalLM
-INFO 12-31 18:16:53 [model.py:1661] Using max model len 32768
-INFO 12-31 18:16:56 [scheduler.py:230] Chunked prefill is enabled with max_num_batched_tokens=16384.
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:16:58 [core.py:93] Initializing a V1 LLM engine (v0.13.0) with config: model='LGAI-EXAONE/EXAONE-4.0-32B', speculative_config=None, tokenizer='LGAI-EXAONE/EXAONE-4.0-32B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False), seed=0, served_model_name=LGAI-EXAONE/EXAONE-4.0-32B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False}, 'local_cache_dir': None}
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:17:09 [parallel_state.py:1203] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.22.0.2:54203 backend=nccl
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:17:09 [parallel_state.py:1411] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank 0
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:17:14 [gpu_model_runner.py:3562] Starting to load model LGAI-EXAONE/EXAONE-4.0-32B...
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:17:18 [cuda.py:351] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/14 [00:00<?, ?it/s]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:   7% Completed | 1/14 [00:06<01:18,  6.00s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  14% Completed | 2/14 [00:33<03:47, 18.94s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  21% Completed | 3/14 [01:05<04:32, 24.73s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  29% Completed | 4/14 [01:35<04:28, 26.89s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  36% Completed | 5/14 [01:37<02:39, 17.67s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  43% Completed | 6/14 [01:38<01:36, 12.11s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  50% Completed | 7/14 [01:39<01:00,  8.60s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  57% Completed | 8/14 [01:41<00:37,  6.29s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  64% Completed | 9/14 [01:42<00:23,  4.74s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  71% Completed | 10/14 [01:43<00:14,  3.65s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  79% Completed | 11/14 [01:44<00:08,  2.92s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  86% Completed | 12/14 [01:46<00:04,  2.44s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards:  93% Completed | 13/14 [01:47<00:02,  2.11s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards: 100% Completed | 14/14 [01:49<00:00,  1.88s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Loading safetensors checkpoint shards: 100% Completed | 14/14 [01:49<00:00,  7.79s/it]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m 
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:09 [default_loader.py:308] Loading weights took 109.27 seconds
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:10 [gpu_model_runner.py:3659] Model loading took 59.7359 GiB memory and 114.784320 seconds
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:39 [backends.py:643] Using cache directory: /root/.cache/vllm/torch_compile_cache/41e7a716c7/rank_0_0/backbone for vLLM's torch.compile
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:39 [backends.py:703] Dynamo bytecode transform time: 29.07 s
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:52 [backends.py:226] Directly load the compiled graph(s) for compile range (1, 16384) from the cache, took 7.636 s
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:52 [monitor.py:34] torch.compile takes 36.70 s in total
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:54 [gpu_worker.py:375] Available KV cache memory: 20.01 GiB
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:54 [kv_cache_utils.py:1291] GPU KV cache size: 81,952 tokens
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:19:54 [kv_cache_utils.py:1296] Maximum concurrency for 32,768 tokens per request: 3.48x
-[0;36m(EngineCore_DP0 pid=97264)[0;0m 2025-12-31 18:19:54,553 - INFO - autotuner.py:256 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
-[0;36m(EngineCore_DP0 pid=97264)[0;0m 2025-12-31 18:19:54,572 - INFO - autotuner.py:262 - flashinfer.jit: [Autotuner]: Autotuning process ends
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   2%|▏         | 1/51 [00:02<02:02,  2.45s/it]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:02<00:52,  1.08s/it]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:02<00:30,  1.58it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|▉         | 5/51 [00:02<00:15,  3.04it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:03<00:09,  4.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  18%|█▊        | 9/51 [00:03<00:07,  5.74it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:03<00:05,  7.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:03<00:04,  8.08it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:03<00:04,  8.98it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  33%|███▎      | 17/51 [00:03<00:03,  9.66it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:04<00:03, 10.28it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  41%|████      | 21/51 [00:04<00:02, 10.92it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  45%|████▌     | 23/51 [00:04<00:02, 11.27it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 25/51 [00:04<00:02, 11.53it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  53%|█████▎    | 27/51 [00:04<00:02, 11.81it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  57%|█████▋    | 29/51 [00:04<00:01, 12.12it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 31/51 [00:05<00:01, 12.24it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  65%|██████▍   | 33/51 [00:05<00:01, 12.39it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  69%|██████▊   | 35/51 [00:05<00:01, 12.62it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  73%|███████▎  | 37/51 [00:05<00:01, 12.82it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▋  | 39/51 [00:05<00:00, 12.90it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  80%|████████  | 41/51 [00:05<00:00, 12.87it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  84%|████████▍ | 43/51 [00:05<00:00, 13.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 45/51 [00:06<00:00, 13.20it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  92%|█████████▏| 47/51 [00:06<00:00, 13.04it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  96%|█████████▌| 49/51 [00:06<00:00, 13.19it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:06<00:00, 12.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:06<00:00,  7.72it/s]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   2%|▏         | 1/51 [00:00<00:12,  4.15it/s]Capturing CUDA graphs (decode, FULL):   4%|▍         | 2/51 [00:00<00:08,  6.01it/s]Capturing CUDA graphs (decode, FULL):   8%|▊         | 4/51 [00:00<00:05,  8.49it/s]Capturing CUDA graphs (decode, FULL):  12%|█▏        | 6/51 [00:00<00:04,  9.66it/s]Capturing CUDA graphs (decode, FULL):  16%|█▌        | 8/51 [00:00<00:04, 10.49it/s]Capturing CUDA graphs (decode, FULL):  20%|█▉        | 10/51 [00:01<00:03, 11.21it/s]Capturing CUDA graphs (decode, FULL):  24%|██▎       | 12/51 [00:01<00:03, 11.84it/s]Capturing CUDA graphs (decode, FULL):  27%|██▋       | 14/51 [00:01<00:02, 12.51it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 16/51 [00:01<00:02, 12.94it/s]Capturing CUDA graphs (decode, FULL):  35%|███▌      | 18/51 [00:01<00:02, 13.25it/s]Capturing CUDA graphs (decode, FULL):  39%|███▉      | 20/51 [00:01<00:02, 13.81it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 22/51 [00:01<00:02, 14.45it/s]Capturing CUDA graphs (decode, FULL):  47%|████▋     | 24/51 [00:01<00:01, 15.07it/s]Capturing CUDA graphs (decode, FULL):  51%|█████     | 26/51 [00:02<00:01, 15.32it/s]Capturing CUDA graphs (decode, FULL):  55%|█████▍    | 28/51 [00:02<00:01, 15.99it/s]Capturing CUDA graphs (decode, FULL):  59%|█████▉    | 30/51 [00:02<00:01, 16.67it/s]Capturing CUDA graphs (decode, FULL):  63%|██████▎   | 32/51 [00:02<00:01, 17.41it/s]Capturing CUDA graphs (decode, FULL):  67%|██████▋   | 34/51 [00:02<00:00, 17.56it/s]Capturing CUDA graphs (decode, FULL):  71%|███████   | 36/51 [00:02<00:00, 18.08it/s]Capturing CUDA graphs (decode, FULL):  75%|███████▍  | 38/51 [00:02<00:00, 18.34it/s]Capturing CUDA graphs (decode, FULL):  78%|███████▊  | 40/51 [00:02<00:00, 18.76it/s]Capturing CUDA graphs (decode, FULL):  84%|████████▍ | 43/51 [00:02<00:00, 19.72it/s]Capturing CUDA graphs (decode, FULL):  90%|█████████ | 46/51 [00:03<00:00, 20.54it/s]Capturing CUDA graphs (decode, FULL):  96%|█████████▌| 49/51 [00:03<00:00, 21.18it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 51/51 [00:03<00:00, 15.22it/s]
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:20:05 [gpu_model_runner.py:4587] Graph capturing finished in 11 secs, took -2.38 GiB
-[0;36m(EngineCore_DP0 pid=97264)[0;0m INFO 12-31 18:20:05 [core.py:259] init engine (profile, create kv cache, warmup model) took 55.13 seconds
-INFO 12-31 18:20:06 [llm.py:360] Supported tasks: ['generate']
-✓ 모델 로딩 완료: LGAI-EXAONE/EXAONE-4.0-32B
-✓ 모델 준비 완료
-
-[2/3] 답변 생성 시작...
-CSV 파일 로드 완료: 100개 행, 7개 컬럼
-컬럼: ['id', 'category', 'attck_method', 'is_complete_question', 'question', 'source_news_title', 'source_news_content']
-
-평가 모델: EXAONE-4.0-32B
-총 100개 질문 처리 시작...
-
-처리 중 (EXAONE-4.0-32B):   0%|          | 0/100 [00:00<?, ?it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 49.50it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:14<00:00, 14.23s/it, est. speed input: 57.36 toks/s, output: 38.45 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:14<00:00, 14.23s/it, est. speed input: 57.36 toks/s, output: 38.45 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:14<00:00, 14.23s/it, est. speed input: 57.36 toks/s, output: 38.45 toks/s]
-처리 중 (EXAONE-4.0-32B):   1%|          | 1/100 [00:14<23:31, 14.26s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 132.54it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.54s/it, est. speed input: 235.85 toks/s, output: 37.74 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.54s/it, est. speed input: 235.85 toks/s, output: 37.74 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.55s/it, est. speed input: 235.85 toks/s, output: 37.74 toks/s]
-처리 중 (EXAONE-4.0-32B):   2%|▏         | 2/100 [00:16<12:02,  7.38s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 139.74it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.86s/it, est. speed input: 105.29 toks/s, output: 38.15 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.86s/it, est. speed input: 105.29 toks/s, output: 38.15 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.87s/it, est. speed input: 105.29 toks/s, output: 38.15 toks/s]
-처리 중 (EXAONE-4.0-32B):   3%|▎         | 3/100 [00:24<12:17,  7.60s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 202.29it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.18s/it, est. speed input: 68.00 toks/s, output: 38.60 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.18s/it, est. speed input: 68.00 toks/s, output: 38.60 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.18s/it, est. speed input: 68.00 toks/s, output: 38.60 toks/s]
-처리 중 (EXAONE-4.0-32B):   4%|▍         | 4/100 [00:36<15:03,  9.41s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 140.24it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.34s/it, est. speed input: 100.15 toks/s, output: 37.90 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.34s/it, est. speed input: 100.15 toks/s, output: 37.90 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.34s/it, est. speed input: 100.15 toks/s, output: 37.90 toks/s]
-처리 중 (EXAONE-4.0-32B):   5%|▌         | 5/100 [00:45<14:17,  9.03s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 128.05it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.77s/it, est. speed input: 336.85 toks/s, output: 36.83 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.77s/it, est. speed input: 336.85 toks/s, output: 36.83 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.77s/it, est. speed input: 336.85 toks/s, output: 36.83 toks/s]
-처리 중 (EXAONE-4.0-32B):   6%|▌         | 6/100 [00:48<10:49,  6.91s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 93.28it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.35s/it, est. speed input: 239.34 toks/s, output: 36.84 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.35s/it, est. speed input: 239.34 toks/s, output: 36.84 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.35s/it, est. speed input: 239.34 toks/s, output: 36.84 toks/s]
-처리 중 (EXAONE-4.0-32B):   7%|▋         | 7/100 [00:53<09:55,  6.40s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 132.41it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.66s/it, est. speed input: 192.32 toks/s, output: 37.30 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.66s/it, est. speed input: 192.32 toks/s, output: 37.30 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.66s/it, est. speed input: 192.32 toks/s, output: 37.30 toks/s]
-처리 중 (EXAONE-4.0-32B):   8%|▊         | 8/100 [00:59<09:27,  6.17s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 146.27it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.75s/it, est. speed input: 116.48 toks/s, output: 37.79 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.75s/it, est. speed input: 116.48 toks/s, output: 37.79 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.75s/it, est. speed input: 116.48 toks/s, output: 37.79 toks/s]
-처리 중 (EXAONE-4.0-32B):   9%|▉         | 9/100 [01:05<09:38,  6.35s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 66.92it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.20s/it, est. speed input: 78.79 toks/s, output: 37.80 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.20s/it, est. speed input: 78.79 toks/s, output: 37.80 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.20s/it, est. speed input: 78.79 toks/s, output: 37.80 toks/s]
-                                                                           [10/100] ID: 10 - 처리 완료
-처리 중 (EXAONE-4.0-32B):   9%|▉         | 9/100 [01:19<09:38,  6.35s/it]처리 중 (EXAONE-4.0-32B):  10%|█         | 10/100 [01:19<12:42,  8.47s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 106.74it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.19s/it, est. speed input: 241.10 toks/s, output: 36.50 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.19s/it, est. speed input: 241.10 toks/s, output: 36.50 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.19s/it, est. speed input: 241.10 toks/s, output: 36.50 toks/s]
-처리 중 (EXAONE-4.0-32B):  11%|█         | 11/100 [01:25<11:32,  7.78s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 127.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.60s/it, est. speed input: 79.75 toks/s, output: 37.69 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.60s/it, est. speed input: 79.75 toks/s, output: 37.69 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.60s/it, est. speed input: 79.75 toks/s, output: 37.69 toks/s]
-처리 중 (EXAONE-4.0-32B):  12%|█▏        | 12/100 [01:37<13:34,  9.25s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 108.06it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.97s/it, est. speed input: 90.14 toks/s, output: 37.47 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.97s/it, est. speed input: 90.14 toks/s, output: 37.47 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.97s/it, est. speed input: 90.14 toks/s, output: 37.47 toks/s]
-처리 중 (EXAONE-4.0-32B):  13%|█▎        | 13/100 [01:50<15:03, 10.38s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 188.25it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.53s/it, est. speed input: 138.88 toks/s, output: 37.53 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.53s/it, est. speed input: 138.88 toks/s, output: 37.53 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.53s/it, est. speed input: 138.88 toks/s, output: 37.53 toks/s]
-처리 중 (EXAONE-4.0-32B):  14%|█▍        | 14/100 [01:55<12:21,  8.62s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 187.82it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.50s/it, est. speed input: 194.39 toks/s, output: 37.16 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.50s/it, est. speed input: 194.39 toks/s, output: 37.16 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.50s/it, est. speed input: 194.39 toks/s, output: 37.16 toks/s]
-처리 중 (EXAONE-4.0-32B):  15%|█▌        | 15/100 [01:58<10:01,  7.08s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 194.50it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.64s/it, est. speed input: 81.03 toks/s, output: 37.56 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.64s/it, est. speed input: 81.03 toks/s, output: 37.56 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.64s/it, est. speed input: 81.03 toks/s, output: 37.56 toks/s]
-처리 중 (EXAONE-4.0-32B):  16%|█▌        | 16/100 [02:08<10:59,  7.85s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 240.96it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.21s/it, est. speed input: 165.98 toks/s, output: 37.03 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.21s/it, est. speed input: 165.98 toks/s, output: 37.03 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.21s/it, est. speed input: 165.98 toks/s, output: 37.03 toks/s]
-처리 중 (EXAONE-4.0-32B):  17%|█▋        | 17/100 [02:14<10:10,  7.36s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 303.94it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.94s/it, est. speed input: 85.01 toks/s, output: 37.57 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.94s/it, est. speed input: 85.01 toks/s, output: 37.57 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.94s/it, est. speed input: 85.01 toks/s, output: 37.57 toks/s]
-처리 중 (EXAONE-4.0-32B):  18%|█▊        | 18/100 [02:25<11:31,  8.44s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 177.57it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.84s/it, est. speed input: 187.58 toks/s, output: 36.99 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.84s/it, est. speed input: 187.58 toks/s, output: 36.99 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.84s/it, est. speed input: 187.58 toks/s, output: 36.99 toks/s]
-처리 중 (EXAONE-4.0-32B):  19%|█▉        | 19/100 [02:29<09:31,  7.06s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 317.80it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.03s/it, est. speed input: 100.65 toks/s, output: 37.37 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.03s/it, est. speed input: 100.65 toks/s, output: 37.37 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.04s/it, est. speed input: 100.65 toks/s, output: 37.37 toks/s]
-                                                                            [20/100] ID: 20 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  19%|█▉        | 19/100 [02:39<09:31,  7.06s/it]처리 중 (EXAONE-4.0-32B):  20%|██        | 20/100 [02:39<10:36,  7.95s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 400.72it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.39s/it, est. speed input: 68.78 toks/s, output: 37.69 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.39s/it, est. speed input: 68.78 toks/s, output: 37.69 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.39s/it, est. speed input: 68.78 toks/s, output: 37.69 toks/s]
-처리 중 (EXAONE-4.0-32B):  21%|██        | 21/100 [02:48<11:02,  8.39s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 321.55it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.72s/it, est. speed input: 135.80 toks/s, output: 37.23 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.72s/it, est. speed input: 135.80 toks/s, output: 37.23 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.72s/it, est. speed input: 135.80 toks/s, output: 37.23 toks/s]
-처리 중 (EXAONE-4.0-32B):  22%|██▏       | 22/100 [02:54<09:51,  7.59s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 249.16it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.96s/it, est. speed input: 52.34 toks/s, output: 37.55 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.96s/it, est. speed input: 52.34 toks/s, output: 37.55 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.96s/it, est. speed input: 52.34 toks/s, output: 37.55 toks/s]
-처리 중 (EXAONE-4.0-32B):  23%|██▎       | 23/100 [03:15<14:53, 11.60s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 267.27it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.75s/it, est. speed input: 158.82 toks/s, output: 37.05 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.75s/it, est. speed input: 158.82 toks/s, output: 37.05 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.75s/it, est. speed input: 158.82 toks/s, output: 37.05 toks/s]
-처리 중 (EXAONE-4.0-32B):  24%|██▍       | 24/100 [03:21<12:28,  9.85s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 265.60it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.05s/it, est. speed input: 39.66 toks/s, output: 37.66 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.05s/it, est. speed input: 39.66 toks/s, output: 37.66 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.05s/it, est. speed input: 39.66 toks/s, output: 37.66 toks/s]
-처리 중 (EXAONE-4.0-32B):  25%|██▌       | 25/100 [03:44<17:15, 13.81s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 179.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.86s/it, est. speed input: 64.50 toks/s, output: 37.60 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.86s/it, est. speed input: 64.50 toks/s, output: 37.60 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.86s/it, est. speed input: 64.50 toks/s, output: 37.60 toks/s]
-처리 중 (EXAONE-4.0-32B):  26%|██▌       | 26/100 [03:56<16:18, 13.23s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 211.27it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.57s/it, est. speed input: 146.38 toks/s, output: 37.30 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.57s/it, est. speed input: 146.38 toks/s, output: 37.30 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.57s/it, est. speed input: 146.38 toks/s, output: 37.30 toks/s]
-처리 중 (EXAONE-4.0-32B):  27%|██▋       | 27/100 [03:59<12:34, 10.33s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 269.09it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.21s/it, est. speed input: 75.07 toks/s, output: 37.26 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.21s/it, est. speed input: 75.07 toks/s, output: 37.26 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:20<00:00, 20.21s/it, est. speed input: 75.07 toks/s, output: 37.26 toks/s]
-처리 중 (EXAONE-4.0-32B):  28%|██▊       | 28/100 [04:20<15:57, 13.30s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 171.50it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.87s/it, est. speed input: 94.14 toks/s, output: 37.36 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.87s/it, est. speed input: 94.14 toks/s, output: 37.36 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.87s/it, est. speed input: 94.14 toks/s, output: 37.36 toks/s]
-처리 중 (EXAONE-4.0-32B):  29%|██▉       | 29/100 [04:31<14:52, 12.57s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 140.51it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.28s/it, est. speed input: 88.74 toks/s, output: 37.41 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.28s/it, est. speed input: 88.74 toks/s, output: 37.41 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.28s/it, est. speed input: 88.74 toks/s, output: 37.41 toks/s]
-                                                                            [30/100] ID: 30 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  29%|██▉       | 29/100 [04:42<14:52, 12.57s/it]처리 중 (EXAONE-4.0-32B):  30%|███       | 30/100 [04:42<14:13, 12.19s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 275.52it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.83s/it, est. speed input: 105.35 toks/s, output: 37.31 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.83s/it, est. speed input: 105.35 toks/s, output: 37.31 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.84s/it, est. speed input: 105.35 toks/s, output: 37.31 toks/s]
-처리 중 (EXAONE-4.0-32B):  31%|███       | 31/100 [04:49<12:10, 10.58s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 88.66it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 76.19 toks/s, output: 37.56 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 76.19 toks/s, output: 37.56 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 76.19 toks/s, output: 37.56 toks/s]
-처리 중 (EXAONE-4.0-32B):  32%|███▏      | 32/100 [04:56<10:55,  9.64s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 161.59it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.28s/it, est. speed input: 59.60 toks/s, output: 37.72 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.28s/it, est. speed input: 59.60 toks/s, output: 37.72 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.28s/it, est. speed input: 59.60 toks/s, output: 37.72 toks/s]
-처리 중 (EXAONE-4.0-32B):  33%|███▎      | 33/100 [05:05<10:38,  9.54s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 133.48it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.87s/it, est. speed input: 65.53 toks/s, output: 37.73 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.87s/it, est. speed input: 65.53 toks/s, output: 37.73 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.87s/it, est. speed input: 65.53 toks/s, output: 37.73 toks/s]
-처리 중 (EXAONE-4.0-32B):  34%|███▍      | 34/100 [05:17<11:15, 10.24s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 183.33it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.55s/it, est. speed input: 114.54 toks/s, output: 37.46 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.55s/it, est. speed input: 114.54 toks/s, output: 37.46 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.56s/it, est. speed input: 114.54 toks/s, output: 37.46 toks/s]
-처리 중 (EXAONE-4.0-32B):  35%|███▌      | 35/100 [05:23<09:34,  8.84s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 163.80it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 91.42 toks/s, output: 37.60 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 91.42 toks/s, output: 37.60 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 91.42 toks/s, output: 37.60 toks/s]
-처리 중 (EXAONE-4.0-32B):  36%|███▌      | 36/100 [05:31<09:12,  8.63s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 142.17it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.22s/it, est. speed input: 72.64 toks/s, output: 37.70 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.22s/it, est. speed input: 72.64 toks/s, output: 37.70 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.22s/it, est. speed input: 72.64 toks/s, output: 37.70 toks/s]
-처리 중 (EXAONE-4.0-32B):  37%|███▋      | 37/100 [05:42<09:52,  9.41s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 125.44it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.85s/it, est. speed input: 143.21 toks/s, output: 37.20 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.85s/it, est. speed input: 143.21 toks/s, output: 37.20 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.85s/it, est. speed input: 143.21 toks/s, output: 37.20 toks/s]
-처리 중 (EXAONE-4.0-32B):  38%|███▊      | 38/100 [05:50<09:14,  8.95s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 136.60it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.77s/it, est. speed input: 153.66 toks/s, output: 37.29 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.77s/it, est. speed input: 153.66 toks/s, output: 37.29 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.77s/it, est. speed input: 153.66 toks/s, output: 37.29 toks/s]
-처리 중 (EXAONE-4.0-32B):  39%|███▉      | 39/100 [05:56<08:07,  8.00s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 122.56it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.83s/it, est. speed input: 95.01 toks/s, output: 37.49 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.83s/it, est. speed input: 95.01 toks/s, output: 37.49 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.83s/it, est. speed input: 95.01 toks/s, output: 37.49 toks/s]
-                                                                            [40/100] ID: 40 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  39%|███▉      | 39/100 [06:07<08:07,  8.00s/it]처리 중 (EXAONE-4.0-32B):  40%|████      | 40/100 [06:07<08:51,  8.85s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 77.57it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.41s/it, est. speed input: 65.19 toks/s, output: 37.36 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.41s/it, est. speed input: 65.19 toks/s, output: 37.36 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.41s/it, est. speed input: 65.19 toks/s, output: 37.36 toks/s]
-처리 중 (EXAONE-4.0-32B):  41%|████      | 41/100 [06:34<14:11, 14.43s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 145.75it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.22s/it, est. speed input: 41.48 toks/s, output: 37.62 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.22s/it, est. speed input: 41.48 toks/s, output: 37.62 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.22s/it, est. speed input: 41.48 toks/s, output: 37.62 toks/s]
-처리 중 (EXAONE-4.0-32B):  42%|████▏     | 42/100 [07:01<17:39, 18.27s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 171.30it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.03s/it, est. speed input: 27.85 toks/s, output: 37.88 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.03s/it, est. speed input: 27.85 toks/s, output: 37.88 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 27.85 toks/s, output: 37.88 toks/s]
-처리 중 (EXAONE-4.0-32B):  43%|████▎     | 43/100 [07:28<19:51, 20.90s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 255.75it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.14s/it, est. speed input: 40.01 toks/s, output: 37.73 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.14s/it, est. speed input: 40.01 toks/s, output: 37.73 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.14s/it, est. speed input: 40.01 toks/s, output: 37.73 toks/s]
-처리 중 (EXAONE-4.0-32B):  44%|████▍     | 44/100 [07:56<21:15, 22.77s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 127.61it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.59s/it, est. speed input: 93.26 toks/s, output: 37.44 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.59s/it, est. speed input: 93.26 toks/s, output: 37.44 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.59s/it, est. speed input: 93.26 toks/s, output: 37.44 toks/s]
-처리 중 (EXAONE-4.0-32B):  45%|████▌     | 45/100 [08:07<17:48, 19.42s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 210.06it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.36s/it, est. speed input: 48.67 toks/s, output: 37.67 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.36s/it, est. speed input: 48.67 toks/s, output: 37.67 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:23<00:00, 23.36s/it, est. speed input: 48.67 toks/s, output: 37.67 toks/s]
-처리 중 (EXAONE-4.0-32B):  46%|████▌     | 46/100 [08:31<18:32, 20.61s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 226.63it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.86s/it, est. speed input: 159.39 toks/s, output: 37.04 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.86s/it, est. speed input: 159.39 toks/s, output: 37.04 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.86s/it, est. speed input: 159.39 toks/s, output: 37.04 toks/s]
-처리 중 (EXAONE-4.0-32B):  47%|████▋     | 47/100 [08:37<14:33, 16.48s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 221.97it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.35s/it, est. speed input: 141.72 toks/s, output: 37.10 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.35s/it, est. speed input: 141.72 toks/s, output: 37.10 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.36s/it, est. speed input: 141.72 toks/s, output: 37.10 toks/s]
-처리 중 (EXAONE-4.0-32B):  48%|████▊     | 48/100 [08:46<12:10, 14.05s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 393.50it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 67.20 toks/s, output: 37.84 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 67.20 toks/s, output: 37.84 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.14s/it, est. speed input: 67.20 toks/s, output: 37.84 toks/s]
-처리 중 (EXAONE-4.0-32B):  49%|████▉     | 49/100 [08:54<10:26, 12.28s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 187.06it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 28.74 toks/s, output: 37.87 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 28.74 toks/s, output: 37.87 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 28.74 toks/s, output: 37.87 toks/s]
-                                                                            [50/100] ID: 50 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  49%|████▉     | 49/100 [09:21<10:26, 12.28s/it]처리 중 (EXAONE-4.0-32B):  50%|█████     | 50/100 [09:21<13:55, 16.71s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 229.93it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.93s/it, est. speed input: 17.71 toks/s, output: 38.03 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.93s/it, est. speed input: 17.71 toks/s, output: 38.03 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.93s/it, est. speed input: 17.71 toks/s, output: 38.03 toks/s]
-처리 중 (EXAONE-4.0-32B):  51%|█████     | 51/100 [09:48<16:09, 19.78s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 114.90it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.06s/it, est. speed input: 74.53 toks/s, output: 37.42 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.06s/it, est. speed input: 74.53 toks/s, output: 37.42 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.06s/it, est. speed input: 74.53 toks/s, output: 37.42 toks/s]
-처리 중 (EXAONE-4.0-32B):  52%|█████▏    | 52/100 [10:04<14:56, 18.67s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 66.41it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.37s/it, est. speed input: 83.50 toks/s, output: 37.66 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.37s/it, est. speed input: 83.50 toks/s, output: 37.66 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:11<00:00, 11.37s/it, est. speed input: 83.50 toks/s, output: 37.66 toks/s]
-처리 중 (EXAONE-4.0-32B):  53%|█████▎    | 53/100 [10:15<12:54, 16.48s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 95.20it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:17<00:00, 17.57s/it, est. speed input: 71.70 toks/s, output: 37.44 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:17<00:00, 17.57s/it, est. speed input: 71.70 toks/s, output: 37.44 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:17<00:00, 17.57s/it, est. speed input: 71.70 toks/s, output: 37.44 toks/s]
-처리 중 (EXAONE-4.0-32B):  54%|█████▍    | 54/100 [10:33<12:53, 16.81s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 148.85it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.27s/it, est. speed input: 201.75 toks/s, output: 36.98 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.27s/it, est. speed input: 201.75 toks/s, output: 36.98 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.28s/it, est. speed input: 201.75 toks/s, output: 36.98 toks/s]
-처리 중 (EXAONE-4.0-32B):  55%|█████▌    | 55/100 [10:37<09:47, 13.06s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 142.75it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.65s/it, est. speed input: 83.15 toks/s, output: 37.54 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.65s/it, est. speed input: 83.15 toks/s, output: 37.54 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:12<00:00, 12.65s/it, est. speed input: 83.15 toks/s, output: 37.54 toks/s]
-처리 중 (EXAONE-4.0-32B):  56%|█████▌    | 56/100 [10:50<09:29, 12.94s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 130.15it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.74s/it, est. speed input: 172.08 toks/s, output: 37.13 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.74s/it, est. speed input: 172.08 toks/s, output: 37.13 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.74s/it, est. speed input: 172.08 toks/s, output: 37.13 toks/s]
-처리 중 (EXAONE-4.0-32B):  57%|█████▋    | 57/100 [10:56<07:43, 10.78s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 159.83it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.37s/it, est. speed input: 70.81 toks/s, output: 37.72 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.37s/it, est. speed input: 70.81 toks/s, output: 37.72 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.37s/it, est. speed input: 70.81 toks/s, output: 37.72 toks/s]
-처리 중 (EXAONE-4.0-32B):  58%|█████▊    | 58/100 [11:06<07:27, 10.66s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 186.94it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.01s/it, est. speed input: 148.99 toks/s, output: 37.35 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.01s/it, est. speed input: 148.99 toks/s, output: 37.35 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.01s/it, est. speed input: 148.99 toks/s, output: 37.35 toks/s]
-처리 중 (EXAONE-4.0-32B):  59%|█████▉    | 59/100 [11:11<06:07,  8.97s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 182.03it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 27.00s/it, est. speed input: 25.11 toks/s, output: 37.93 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 27.00s/it, est. speed input: 25.11 toks/s, output: 37.93 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:26<00:00, 27.00s/it, est. speed input: 25.11 toks/s, output: 37.93 toks/s]
-                                                                            [60/100] ID: 60 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  59%|█████▉    | 59/100 [11:38<06:07,  8.97s/it]처리 중 (EXAONE-4.0-32B):  60%|██████    | 60/100 [11:38<09:35, 14.38s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 128.51it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 12.90s/it, est. speed input: 84.76 toks/s, output: 37.53 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 12.90s/it, est. speed input: 84.76 toks/s, output: 37.53 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.11s/it, est. speed input: 84.76 toks/s, output: 37.53 toks/s]
-처리 중 (EXAONE-4.0-32B):  61%|██████    | 61/100 [11:51<09:06, 14.00s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 207.24it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.57s/it, est. speed input: 71.65 toks/s, output: 37.92 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.57s/it, est. speed input: 71.65 toks/s, output: 37.92 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:08<00:00,  8.57s/it, est. speed input: 71.65 toks/s, output: 37.92 toks/s]
-처리 중 (EXAONE-4.0-32B):  62%|██████▏   | 62/100 [12:00<07:50, 12.38s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 122.60it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.25s/it, est. speed input: 214.36 toks/s, output: 36.74 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.25s/it, est. speed input: 214.36 toks/s, output: 36.74 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.26s/it, est. speed input: 214.36 toks/s, output: 36.74 toks/s]
-처리 중 (EXAONE-4.0-32B):  63%|██████▎   | 63/100 [12:05<06:19, 10.24s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 113.94it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:21<00:00, 21.62s/it, est. speed input: 57.02 toks/s, output: 37.60 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:21<00:00, 21.62s/it, est. speed input: 57.02 toks/s, output: 37.60 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:21<00:00, 21.63s/it, est. speed input: 57.02 toks/s, output: 37.60 toks/s]
-처리 중 (EXAONE-4.0-32B):  64%|██████▍   | 64/100 [12:27<08:11, 13.66s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 181.26it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.56s/it, est. speed input: 84.87 toks/s, output: 38.09 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.56s/it, est. speed input: 84.87 toks/s, output: 38.09 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.56s/it, est. speed input: 84.87 toks/s, output: 38.09 toks/s]
-처리 중 (EXAONE-4.0-32B):  65%|██████▌   | 65/100 [12:36<07:15, 12.43s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 89.49it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.33s/it, est. speed input: 278.17 toks/s, output: 36.27 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.33s/it, est. speed input: 278.17 toks/s, output: 36.27 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.33s/it, est. speed input: 278.17 toks/s, output: 36.27 toks/s]
-처리 중 (EXAONE-4.0-32B):  66%|██████▌   | 66/100 [12:41<05:40, 10.01s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 118.39it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.82s/it, est. speed input: 313.69 toks/s, output: 35.87 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.82s/it, est. speed input: 313.69 toks/s, output: 35.87 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.82s/it, est. speed input: 313.69 toks/s, output: 35.87 toks/s]
-처리 중 (EXAONE-4.0-32B):  67%|██████▋   | 67/100 [12:44<04:29,  8.15s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 219.93it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.96s/it, est. speed input: 18.77 toks/s, output: 37.98 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.96s/it, est. speed input: 18.77 toks/s, output: 37.98 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.96s/it, est. speed input: 18.77 toks/s, output: 37.98 toks/s]
-처리 중 (EXAONE-4.0-32B):  68%|██████▊   | 68/100 [13:11<07:21, 13.80s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 58.48it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.88s/it, est. speed input: 155.52 toks/s, output: 37.21 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.88s/it, est. speed input: 155.52 toks/s, output: 37.21 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.88s/it, est. speed input: 155.52 toks/s, output: 37.21 toks/s]
-처리 중 (EXAONE-4.0-32B):  69%|██████▉   | 69/100 [13:18<06:03, 11.73s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 116.35it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.66s/it, est. speed input: 132.35 toks/s, output: 37.33 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.66s/it, est. speed input: 132.35 toks/s, output: 37.33 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.66s/it, est. speed input: 132.35 toks/s, output: 37.33 toks/s]
-                                                                            [70/100] ID: 70 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  69%|██████▉   | 69/100 [13:26<06:03, 11.73s/it]처리 중 (EXAONE-4.0-32B):  70%|███████   | 70/100 [13:26<05:15, 10.51s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 131.16it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.53s/it, est. speed input: 153.88 toks/s, output: 37.21 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.53s/it, est. speed input: 153.88 toks/s, output: 37.21 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.53s/it, est. speed input: 153.88 toks/s, output: 37.21 toks/s]
-처리 중 (EXAONE-4.0-32B):  71%|███████   | 71/100 [13:33<04:30,  9.32s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 123.98it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.09s/it, est. speed input: 365.29 toks/s, output: 35.62 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.09s/it, est. speed input: 365.29 toks/s, output: 35.62 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:03<00:00,  3.09s/it, est. speed input: 365.29 toks/s, output: 35.62 toks/s]
-처리 중 (EXAONE-4.0-32B):  72%|███████▏  | 72/100 [13:36<03:28,  7.46s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 123.72it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.77s/it, est. speed input: 146.50 toks/s, output: 37.17 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.77s/it, est. speed input: 146.50 toks/s, output: 37.17 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.78s/it, est. speed input: 146.50 toks/s, output: 37.17 toks/s]
-처리 중 (EXAONE-4.0-32B):  73%|███████▎  | 73/100 [13:43<03:24,  7.56s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 206.15it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.89s/it, est. speed input: 39.52 toks/s, output: 37.94 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.89s/it, est. speed input: 39.52 toks/s, output: 37.94 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.89s/it, est. speed input: 39.52 toks/s, output: 37.94 toks/s]
-처리 중 (EXAONE-4.0-32B):  74%|███████▍  | 74/100 [13:57<04:05,  9.46s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 175.19it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.08s/it, est. speed input: 86.24 toks/s, output: 37.67 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.08s/it, est. speed input: 86.24 toks/s, output: 37.67 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.08s/it, est. speed input: 86.24 toks/s, output: 37.67 toks/s]
-처리 중 (EXAONE-4.0-32B):  75%|███████▌  | 75/100 [14:06<03:53,  9.35s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 168.83it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 112.81 toks/s, output: 37.42 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 112.81 toks/s, output: 37.42 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:07<00:00,  7.43s/it, est. speed input: 112.81 toks/s, output: 37.42 toks/s]
-처리 중 (EXAONE-4.0-32B):  76%|███████▌  | 76/100 [14:14<03:30,  8.78s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 119.43it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.13s/it, est. speed input: 120.34 toks/s, output: 37.34 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.13s/it, est. speed input: 120.34 toks/s, output: 37.34 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.13s/it, est. speed input: 120.34 toks/s, output: 37.34 toks/s]
-처리 중 (EXAONE-4.0-32B):  77%|███████▋  | 77/100 [14:23<03:24,  8.89s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 97.89it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:15<00:00, 15.08s/it, est. speed input: 100.29 toks/s, output: 37.28 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:15<00:00, 15.08s/it, est. speed input: 100.29 toks/s, output: 37.28 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:15<00:00, 15.08s/it, est. speed input: 100.29 toks/s, output: 37.28 toks/s]
-처리 중 (EXAONE-4.0-32B):  78%|███████▊  | 78/100 [14:38<03:56, 10.75s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 108.26it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.11s/it, est. speed input: 134.19 toks/s, output: 37.20 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.11s/it, est. speed input: 134.19 toks/s, output: 37.20 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.12s/it, est. speed input: 134.19 toks/s, output: 37.20 toks/s]
-처리 중 (EXAONE-4.0-32B):  79%|███████▉  | 79/100 [14:47<03:35, 10.26s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 170.61it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.03s/it, est. speed input: 28.42 toks/s, output: 37.89 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.03s/it, est. speed input: 28.42 toks/s, output: 37.89 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.03s/it, est. speed input: 28.42 toks/s, output: 37.89 toks/s]
-                                                                            [80/100] ID: 80 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  79%|███████▉  | 79/100 [15:14<03:35, 10.26s/it]처리 중 (EXAONE-4.0-32B):  80%|████████  | 80/100 [15:14<05:05, 15.30s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 124.38it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.61s/it, est. speed input: 118.24 toks/s, output: 37.31 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.61s/it, est. speed input: 118.24 toks/s, output: 37.31 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:10<00:00, 10.62s/it, est. speed input: 118.24 toks/s, output: 37.31 toks/s]
-처리 중 (EXAONE-4.0-32B):  81%|████████  | 81/100 [15:25<04:24, 13.90s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 173.40it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.08s/it, est. speed input: 32.54 toks/s, output: 37.82 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.08s/it, est. speed input: 32.54 toks/s, output: 37.82 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.08s/it, est. speed input: 32.54 toks/s, output: 37.82 toks/s]
-처리 중 (EXAONE-4.0-32B):  82%|████████▏ | 82/100 [15:52<05:21, 17.85s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 69.39it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.67s/it, est. speed input: 126.74 toks/s, output: 36.95 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.67s/it, est. speed input: 126.74 toks/s, output: 36.95 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:13<00:00, 13.67s/it, est. speed input: 126.74 toks/s, output: 36.95 toks/s]
-처리 중 (EXAONE-4.0-32B):  83%|████████▎ | 83/100 [16:06<04:42, 16.60s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 342.62it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 26.62 toks/s, output: 37.86 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 26.62 toks/s, output: 37.86 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.05s/it, est. speed input: 26.62 toks/s, output: 37.86 toks/s]
-처리 중 (EXAONE-4.0-32B):  84%|████████▍ | 84/100 [16:33<05:15, 19.74s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 160.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.97s/it, est. speed input: 20.54 toks/s, output: 37.96 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.97s/it, est. speed input: 20.54 toks/s, output: 37.96 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.98s/it, est. speed input: 20.54 toks/s, output: 37.96 toks/s]
-처리 중 (EXAONE-4.0-32B):  85%|████████▌ | 85/100 [17:00<05:28, 21.91s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 162.82it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 30.44 toks/s, output: 37.87 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 30.44 toks/s, output: 37.87 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:27<00:00, 27.04s/it, est. speed input: 30.44 toks/s, output: 37.87 toks/s]
-처리 중 (EXAONE-4.0-32B):  86%|████████▌ | 86/100 [17:27<05:28, 23.45s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 221.35it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.28s/it, est. speed input: 92.16 toks/s, output: 37.66 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.28s/it, est. speed input: 92.16 toks/s, output: 37.66 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.29s/it, est. speed input: 92.16 toks/s, output: 37.66 toks/s]
-처리 중 (EXAONE-4.0-32B):  87%|████████▋ | 87/100 [17:32<03:54, 18.01s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 227.99it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.41s/it, est. speed input: 93.94 toks/s, output: 37.72 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.41s/it, est. speed input: 93.94 toks/s, output: 37.72 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.41s/it, est. speed input: 93.94 toks/s, output: 37.72 toks/s]
-처리 중 (EXAONE-4.0-32B):  88%|████████▊ | 88/100 [17:37<02:50, 14.23s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 125.37it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.47s/it, est. speed input: 114.03 toks/s, output: 37.37 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.47s/it, est. speed input: 114.03 toks/s, output: 37.37 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.47s/it, est. speed input: 114.03 toks/s, output: 37.37 toks/s]
-처리 중 (EXAONE-4.0-32B):  89%|████████▉ | 89/100 [17:47<02:20, 12.81s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 126.99it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.03s/it, est. speed input: 110.43 toks/s, output: 37.44 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.03s/it, est. speed input: 110.43 toks/s, output: 37.44 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.03s/it, est. speed input: 110.43 toks/s, output: 37.44 toks/s]
-                                                                            [90/100] ID: 90 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  89%|████████▉ | 89/100 [17:56<02:20, 12.81s/it]처리 중 (EXAONE-4.0-32B):  90%|█████████ | 90/100 [17:56<01:56, 11.68s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 282.44it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:25<00:00, 25.66s/it, est. speed input: 33.78 toks/s, output: 37.95 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:25<00:00, 25.66s/it, est. speed input: 33.78 toks/s, output: 37.95 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:25<00:00, 25.66s/it, est. speed input: 33.78 toks/s, output: 37.95 toks/s]
-처리 중 (EXAONE-4.0-32B):  91%|█████████ | 91/100 [18:22<02:22, 15.87s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 139.32it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.07s/it, est. speed input: 543.09 toks/s, output: 34.72 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.07s/it, est. speed input: 543.09 toks/s, output: 34.72 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.08s/it, est. speed input: 543.09 toks/s, output: 34.72 toks/s]
-처리 중 (EXAONE-4.0-32B):  92%|█████████▏| 92/100 [18:24<01:33, 11.74s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 120.14it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.09s/it, est. speed input: 237.16 toks/s, output: 36.54 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.09s/it, est. speed input: 237.16 toks/s, output: 36.54 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.09s/it, est. speed input: 237.16 toks/s, output: 36.54 toks/s]
-처리 중 (EXAONE-4.0-32B):  93%|█████████▎| 93/100 [18:29<01:08,  9.75s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 225.82it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.16s/it, est. speed input: 18.96 toks/s, output: 38.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.16s/it, est. speed input: 18.96 toks/s, output: 38.00 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:26<00:00, 26.16s/it, est. speed input: 18.96 toks/s, output: 38.00 toks/s]
-처리 중 (EXAONE-4.0-32B):  94%|█████████▍| 94/100 [18:55<01:28, 14.67s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 82.01it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.94s/it, est. speed input: 130.22 toks/s, output: 37.47 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.94s/it, est. speed input: 130.22 toks/s, output: 37.47 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:04<00:00,  4.94s/it, est. speed input: 130.22 toks/s, output: 37.47 toks/s]
-처리 중 (EXAONE-4.0-32B):  95%|█████████▌| 95/100 [19:00<00:58, 11.76s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 89.13it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.57s/it, est. speed input: 81.90 toks/s, output: 37.30 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.57s/it, est. speed input: 81.90 toks/s, output: 37.30 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:16<00:00, 16.57s/it, est. speed input: 81.90 toks/s, output: 37.30 toks/s]
-처리 중 (EXAONE-4.0-32B):  96%|█████████▌| 96/100 [19:17<00:52, 13.21s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 170.29it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.38s/it, est. speed input: 85.33 toks/s, output: 37.65 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.38s/it, est. speed input: 85.33 toks/s, output: 37.65 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:09<00:00,  9.38s/it, est. speed input: 85.33 toks/s, output: 37.65 toks/s]
-처리 중 (EXAONE-4.0-32B):  97%|█████████▋| 97/100 [19:26<00:36, 12.06s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 95.83it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.51s/it, est. speed input: 239.60 toks/s, output: 36.40 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.51s/it, est. speed input: 239.60 toks/s, output: 36.40 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:06<00:00,  6.51s/it, est. speed input: 239.60 toks/s, output: 36.40 toks/s]
-처리 중 (EXAONE-4.0-32B):  98%|█████████▊| 98/100 [19:32<00:20, 10.40s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 168.34it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:18<00:00, 18.26s/it, est. speed input: 48.53 toks/s, output: 37.79 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:18<00:00, 18.26s/it, est. speed input: 48.53 toks/s, output: 37.79 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:18<00:00, 18.26s/it, est. speed input: 48.53 toks/s, output: 37.79 toks/s]
-처리 중 (EXAONE-4.0-32B):  99%|█████████▉| 99/100 [19:51<00:12, 12.76s/it]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 205.55it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.44s/it, est. speed input: 102.02 toks/s, output: 37.68 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.44s/it, est. speed input: 102.02 toks/s, output: 37.68 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:05<00:00,  5.44s/it, est. speed input: 102.02 toks/s, output: 37.68 toks/s]
-                                                                            [100/100] ID: 100 - 처리 완료
-처리 중 (EXAONE-4.0-32B):  99%|█████████▉| 99/100 [19:56<00:12, 12.76s/it]처리 중 (EXAONE-4.0-32B): 100%|██████████| 100/100 [19:56<00:00, 10.57s/it]처리 중 (EXAONE-4.0-32B): 100%|██████████| 100/100 [19:56<00:00, 11.97s/it]
-
-처리 완료: 총 100개 중 100개 성공, 0개 실패
-
-결과 저장 완료: /workspace/Fin-Ben/eval/_results/3_fin_toxicity/3_fin_toxicity_EXAONE-4.0-32B_answer.csv
-
-[3/3] 모델 메모리 해제 중...
-✓ LGAI-EXAONE/EXAONE-4.0-32B 처리 완료
-
-모델 캐시 삭제 중: /workspace/.cache/huggingface/hub/models--LGAI-EXAONE--EXAONE-4.0-32B
-✓ 모델 캐시 삭제 완료: LGAI-EXAONE/EXAONE-4.0-32B
-
-
-============================================================
-[모델 2/2] LGAI-EXAONE/EXAONE-4.0-1.2B
-============================================================
-
-[1/3] 모델 로딩 중...
-
-모델 로딩 중: LGAI-EXAONE/EXAONE-4.0-1.2B
-GPU 메모리 사용률: 0.9
-최대 시퀀스 길이: 32768
-INFO 12-31 18:40:08 [utils.py:253] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 32768, 'disable_log_stats': True, 'model': 'LGAI-EXAONE/EXAONE-4.0-1.2B'}
-The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
-INFO 12-31 18:40:10 [model.py:514] Resolved architecture: Exaone4ForCausalLM
-INFO 12-31 18:40:10 [model.py:1661] Using max model len 32768
-INFO 12-31 18:40:10 [scheduler.py:230] Chunked prefill is enabled with max_num_batched_tokens=16384.
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:40:14 [core.py:93] Initializing a V1 LLM engine (v0.13.0) with config: model='LGAI-EXAONE/EXAONE-4.0-1.2B', speculative_config=None, tokenizer='LGAI-EXAONE/EXAONE-4.0-1.2B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=32768, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False), seed=0, served_model_name=LGAI-EXAONE/EXAONE-4.0-1.2B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False}, 'local_cache_dir': None}
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:40:28 [parallel_state.py:1203] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.22.0.2:41355 backend=nccl
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:40:28 [parallel_state.py:1411] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank 0
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:40:33 [gpu_model_runner.py:3562] Starting to load model LGAI-EXAONE/EXAONE-4.0-1.2B...
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:40:37 [cuda.py:351] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:11 [weight_utils.py:487] Time spent downloading weights for LGAI-EXAONE/EXAONE-4.0-1.2B: 32.729364 seconds
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:11 [weight_utils.py:527] No model.safetensors.index.json found in remote.
-[0;36m(EngineCore_DP0 pid=101536)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
-[0;36m(EngineCore_DP0 pid=101536)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:01<00:00,  1.52s/it]
-[0;36m(EngineCore_DP0 pid=101536)[0;0m Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:01<00:00,  1.52s/it]
-[0;36m(EngineCore_DP0 pid=101536)[0;0m 
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:13 [default_loader.py:308] Loading weights took 1.65 seconds
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:14 [gpu_model_runner.py:3659] Model loading took 2.3910 GiB memory and 39.514382 seconds
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:37 [backends.py:643] Using cache directory: /root/.cache/vllm/torch_compile_cache/012e17cab5/rank_0_0/backbone for vLLM's torch.compile
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:37 [backends.py:703] Dynamo bytecode transform time: 22.76 s
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:43 [backends.py:226] Directly load the compiled graph(s) for compile range (1, 16384) from the cache, took 3.012 s
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:43 [monitor.py:34] torch.compile takes 25.77 s in total
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:44 [gpu_worker.py:375] Available KV cache memory: 77.46 GiB
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:44 [kv_cache_utils.py:1291] GPU KV cache size: 1,353,744 tokens
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:44 [kv_cache_utils.py:1296] Maximum concurrency for 32,768 tokens per request: 41.31x
-[0;36m(EngineCore_DP0 pid=101536)[0;0m 2025-12-31 18:41:44,829 - INFO - autotuner.py:256 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
-[0;36m(EngineCore_DP0 pid=101536)[0;0m 2025-12-31 18:41:44,843 - INFO - autotuner.py:262 - flashinfer.jit: [Autotuner]: Autotuning process ends
-[0;36m(EngineCore_DP0 pid=101536)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:00<00:01, 26.11it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:00<00:01, 30.96it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:00<00:01, 31.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:00<00:01, 32.34it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:00<00:01, 31.65it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  45%|████▌     | 23/51 [00:00<00:00, 31.65it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  53%|█████▎    | 27/51 [00:00<00:00, 31.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 31/51 [00:00<00:00, 30.83it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  69%|██████▊   | 35/51 [00:01<00:00, 30.15it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▋  | 39/51 [00:01<00:00, 29.96it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  84%|████████▍ | 43/51 [00:01<00:00, 29.87it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  92%|█████████▏| 47/51 [00:01<00:00, 30.43it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:01<00:00, 31.40it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:01<00:00, 30.89it/s]
-[0;36m(EngineCore_DP0 pid=101536)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   8%|▊         | 4/51 [00:00<00:01, 36.09it/s]Capturing CUDA graphs (decode, FULL):  20%|█▉        | 10/51 [00:00<00:00, 45.05it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 16/51 [00:00<00:00, 48.24it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 22/51 [00:00<00:00, 48.99it/s]Capturing CUDA graphs (decode, FULL):  53%|█████▎    | 27/51 [00:00<00:00, 48.37it/s]Capturing CUDA graphs (decode, FULL):  65%|██████▍   | 33/51 [00:00<00:00, 49.22it/s]Capturing CUDA graphs (decode, FULL):  75%|███████▍  | 38/51 [00:00<00:00, 49.37it/s]Capturing CUDA graphs (decode, FULL):  84%|████████▍ | 43/51 [00:00<00:00, 49.08it/s]Capturing CUDA graphs (decode, FULL):  94%|█████████▍| 48/51 [00:00<00:00, 48.81it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 51/51 [00:01<00:00, 48.42it/s]
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:48 [gpu_model_runner.py:4587] Graph capturing finished in 3 secs, took -0.13 GiB
-[0;36m(EngineCore_DP0 pid=101536)[0;0m INFO 12-31 18:41:48 [core.py:259] init engine (profile, create kv cache, warmup model) took 34.08 seconds
-INFO 12-31 18:41:48 [llm.py:360] Supported tasks: ['generate']
-✓ 모델 로딩 완료: LGAI-EXAONE/EXAONE-4.0-1.2B
-✓ 모델 준비 완료
-
-[2/3] 답변 생성 시작...
-CSV 파일 로드 완료: 100개 행, 7개 컬럼
-컬럼: ['id', 'category', 'attck_method', 'is_complete_question', 'question', 'source_news_title', 'source_news_content']
-
-평가 모델: EXAONE-4.0-1.2B
-총 100개 질문 처리 시작...
-
-처리 중 (EXAONE-4.0-1.2B):   0%|          | 0/100 [00:00<?, ?it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 70.86it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.20it/s, est. speed input: 6705.42 toks/s, output: 123.02 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.20it/s, est. speed input: 6705.42 toks/s, output: 123.02 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.07it/s, est. speed input: 6705.42 toks/s, output: 123.02 toks/s]
-처리 중 (EXAONE-4.0-1.2B):   1%|          | 1/100 [00:00<00:14,  7.02it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 145.17it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 32.25it/s, est. speed input: 19679.25 toks/s, output: 65.36 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 31.37it/s, est. speed input: 19679.25 toks/s, output: 65.36 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 134.90it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 11.63it/s, est. speed input: 9692.32 toks/s, output: 268.89 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 11.50it/s, est. speed input: 9692.32 toks/s, output: 268.89 toks/s]
-처리 중 (EXAONE-4.0-1.2B):   3%|▎         | 3/100 [00:00<00:08, 11.32it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 200.51it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 13.04it/s, est. speed input: 10885.25 toks/s, output: 327.75 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 12.93it/s, est. speed input: 10885.25 toks/s, output: 327.75 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 145.79it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.47it/s, est. speed input: 3734.46 toks/s, output: 317.21 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.47it/s, est. speed input: 3734.46 toks/s, output: 317.21 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.43it/s, est. speed input: 3734.46 toks/s, output: 317.21 toks/s]
-처리 중 (EXAONE-4.0-1.2B):   5%|▌         | 5/100 [00:00<00:11,  7.98it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 122.68it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.91it/s, est. speed input: 10230.20 toks/s, output: 241.03 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.83it/s, est. speed input: 10230.20 toks/s, output: 241.03 toks/s]
-처리 중 (EXAONE-4.0-1.2B):   6%|▌         | 6/100 [00:00<00:11,  8.37it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 95.59it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.58it/s, est. speed input: 11010.95 toks/s, output: 283.32 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.58it/s, est. speed input: 11010.95 toks/s, output: 283.32 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.48it/s, est. speed input: 11010.95 toks/s, output: 283.32 toks/s]
-처리 중 (EXAONE-4.0-1.2B):   7%|▋         | 7/100 [00:00<00:11,  8.14it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 124.76it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 37.21it/s, est. speed input: 41172.94 toks/s, output: 188.74 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 36.25it/s, est. speed input: 41172.94 toks/s, output: 188.74 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 154.22it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 40.89it/s, est. speed input: 33447.20 toks/s, output: 41.86 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 39.29it/s, est. speed input: 33447.20 toks/s, output: 41.86 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 137.91it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 60.06it/s, est. speed input: 64455.29 toks/s, output: 61.23 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 58.23it/s, est. speed input: 64455.29 toks/s, output: 61.23 toks/s]
-                                                                            [10/100] ID: 10 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):   7%|▋         | 7/100 [00:00<00:11,  8.14it/s]처리 중 (EXAONE-4.0-1.2B):  10%|█         | 10/100 [00:00<00:06, 13.46it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 111.78it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.07it/s, est. speed input: 15108.90 toks/s, output: 272.67 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.98it/s, est. speed input: 15108.90 toks/s, output: 272.67 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 131.47it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 30.22it/s, est. speed input: 30866.44 toks/s, output: 122.13 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 29.36it/s, est. speed input: 30866.44 toks/s, output: 122.13 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  12%|█▏        | 12/100 [00:01<00:06, 13.23it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 118.38it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 34.88it/s, est. speed input: 41502.80 toks/s, output: 35.41 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 33.95it/s, est. speed input: 41502.80 toks/s, output: 35.41 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 225.88it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 22.51it/s, est. speed input: 14368.36 toks/s, output: 227.94 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 21.25it/s, est. speed input: 14368.36 toks/s, output: 227.94 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 126.47it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 39.48it/s, est. speed input: 27444.61 toks/s, output: 40.17 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 38.45it/s, est. speed input: 27444.61 toks/s, output: 40.17 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  15%|█▌        | 15/100 [00:01<00:05, 16.09it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 180.78it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 15.75it/s, est. speed input: 12415.06 toks/s, output: 237.66 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 15.55it/s, est. speed input: 12415.06 toks/s, output: 237.66 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 127.25it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.19it/s, est. speed input: 3293.07 toks/s, output: 319.17 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.19it/s, est. speed input: 3293.07 toks/s, output: 319.17 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.17it/s, est. speed input: 3293.07 toks/s, output: 319.17 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  17%|█▋        | 17/100 [00:01<00:08,  9.86it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 149.55it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 19.92it/s, est. speed input: 18783.90 toks/s, output: 221.19 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 19.58it/s, est. speed input: 18783.90 toks/s, output: 221.19 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 186.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 21.67it/s, est. speed input: 15854.15 toks/s, output: 153.40 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 21.31it/s, est. speed input: 15854.15 toks/s, output: 153.40 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  19%|█▉        | 19/100 [00:01<00:07, 11.27it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 264.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 46.82it/s, est. speed input: 48181.33 toks/s, output: 95.23 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 45.67it/s, est. speed input: 48181.33 toks/s, output: 95.23 toks/s]
-                                                                             [20/100] ID: 20 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  19%|█▉        | 19/100 [00:01<00:07, 11.27it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 211.84it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 30.51it/s, est. speed input: 19944.06 toks/s, output: 123.24 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 29.95it/s, est. speed input: 19944.06 toks/s, output: 123.24 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 196.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 46.86it/s, est. speed input: 36966.59 toks/s, output: 95.00 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 46.13it/s, est. speed input: 36966.59 toks/s, output: 95.00 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 283.02it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.83it/s, est. speed input: 2004.12 toks/s, output: 314.15 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.83it/s, est. speed input: 2004.12 toks/s, output: 314.15 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s, est. speed input: 2004.12 toks/s, output: 314.15 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  23%|██▎       | 23/100 [00:02<00:09,  8.16it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 130.07it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.03it/s, est. speed input: 3686.32 toks/s, output: 314.68 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.03it/s, est. speed input: 3686.32 toks/s, output: 314.68 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.01it/s, est. speed input: 3686.32 toks/s, output: 314.68 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 132.19it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 24.56it/s, est. speed input: 22767.78 toks/s, output: 148.67 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 24.05it/s, est. speed input: 22767.78 toks/s, output: 148.67 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  25%|██▌       | 25/100 [00:02<00:09,  7.64it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 176.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.67it/s, est. speed input: 8223.85 toks/s, output: 268.38 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.59it/s, est. speed input: 8223.85 toks/s, output: 268.38 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 221.36it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 58.01it/s, est. speed input: 31131.21 toks/s, output: 296.98 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 55.54it/s, est. speed input: 31131.21 toks/s, output: 296.98 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  27%|██▋       | 27/100 [00:02<00:08,  8.80it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 100.18it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.06it/s, est. speed input: 1614.19 toks/s, output: 358.51 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.06it/s, est. speed input: 1614.19 toks/s, output: 358.51 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.06it/s, est. speed input: 1614.19 toks/s, output: 358.51 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 123.16it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 30.00it/s, est. speed input: 31400.19 toks/s, output: 244.16 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 29.38it/s, est. speed input: 31400.19 toks/s, output: 244.16 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  29%|██▉       | 29/100 [00:03<00:15,  4.59it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 143.14it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 70.18it/s, est. speed input: 73827.54 toks/s, output: 73.31 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 67.31it/s, est. speed input: 73827.54 toks/s, output: 73.31 toks/s]
-                                                                             [30/100] ID: 30 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  29%|██▉       | 29/100 [00:03<00:15,  4.59it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 196.41it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 55.88it/s, est. speed input: 41079.79 toks/s, output: 56.84 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 54.37it/s, est. speed input: 41079.79 toks/s, output: 56.84 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 228.52it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 85.10it/s, est. speed input: 49512.50 toks/s, output: 260.92 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 80.16it/s, est. speed input: 49512.50 toks/s, output: 260.92 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 238.49it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 117.53it/s, est. speed input: 66896.92 toks/s, output: 240.08 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 111.78it/s, est. speed input: 66896.92 toks/s, output: 240.08 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 188.29it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 76.14it/s, est. speed input: 62091.72 toks/s, output: 79.39 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 72.66it/s, est. speed input: 62091.72 toks/s, output: 79.39 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  34%|███▍      | 34/100 [00:03<00:08,  8.22it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 222.31it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 54.79it/s, est. speed input: 35615.66 toks/s, output: 167.39 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 53.27it/s, est. speed input: 35615.66 toks/s, output: 167.39 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 190.42it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 34.87it/s, est. speed input: 26629.59 toks/s, output: 213.19 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 34.23it/s, est. speed input: 26629.59 toks/s, output: 213.19 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 164.31it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 49.28it/s, est. speed input: 40920.28 toks/s, output: 200.18 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 47.81it/s, est. speed input: 40920.28 toks/s, output: 200.18 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 149.05it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 43.93it/s, est. speed input: 50663.03 toks/s, output: 223.33 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 42.99it/s, est. speed input: 50663.03 toks/s, output: 223.33 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  38%|███▊      | 38/100 [00:04<00:05, 11.21it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 172.22it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.41it/s, est. speed input: 3908.50 toks/s, output: 348.20 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.41it/s, est. speed input: 3908.50 toks/s, output: 348.20 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.38it/s, est. speed input: 3908.50 toks/s, output: 348.20 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 139.17it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 58.09it/s, est. speed input: 60935.49 toks/s, output: 176.54 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 55.42it/s, est. speed input: 60935.49 toks/s, output: 176.54 toks/s]
-                                                                             [40/100] ID: 40 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  38%|███▊      | 38/100 [00:04<00:05, 11.21it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 86.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.37it/s, est. speed input: 11401.80 toks/s, output: 331.32 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.37it/s, est. speed input: 11401.80 toks/s, output: 331.32 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.30it/s, est. speed input: 11401.80 toks/s, output: 331.32 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  41%|████      | 41/100 [00:04<00:06,  9.52it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 161.93it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.62it/s, est. speed input: 7479.19 toks/s, output: 344.30 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.62it/s, est. speed input: 7479.19 toks/s, output: 344.30 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.55it/s, est. speed input: 7479.19 toks/s, output: 344.30 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 194.01it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 56.47it/s, est. speed input: 44196.29 toks/s, output: 174.16 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 54.60it/s, est. speed input: 44196.29 toks/s, output: 174.16 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  43%|████▎     | 43/100 [00:04<00:05,  9.73it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 62.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 75.29it/s, est. speed input: 84353.68 toks/s, output: 76.43 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 72.54it/s, est. speed input: 84353.68 toks/s, output: 76.43 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 121.75it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 83.81it/s, est. speed input: 92918.33 toks/s, output: 85.35 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 79.24it/s, est. speed input: 92918.33 toks/s, output: 85.35 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 125.45it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 15.57it/s, est. speed input: 17782.81 toks/s, output: 296.80 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 15.44it/s, est. speed input: 17782.81 toks/s, output: 296.80 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  46%|████▌     | 46/100 [00:04<00:04, 11.76it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 131.44it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 24.16it/s, est. speed input: 26841.54 toks/s, output: 245.18 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 23.87it/s, est. speed input: 26841.54 toks/s, output: 245.18 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 110.15it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.17it/s, est. speed input: 3758.24 toks/s, output: 349.03 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.17it/s, est. speed input: 3758.24 toks/s, output: 349.03 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.15it/s, est. speed input: 3758.24 toks/s, output: 349.03 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  48%|████▊     | 48/100 [00:05<00:05,  9.17it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 229.38it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 25.56it/s, est. speed input: 14212.87 toks/s, output: 336.08 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 25.15it/s, est. speed input: 14212.87 toks/s, output: 336.08 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 195.17it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 16.30it/s, est. speed input: 12763.57 toks/s, output: 311.73 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 16.12it/s, est. speed input: 12763.57 toks/s, output: 311.73 toks/s]
-                                                                             [50/100] ID: 50 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  48%|████▊     | 48/100 [00:05<00:05,  9.17it/s]처리 중 (EXAONE-4.0-1.2B):  50%|█████     | 50/100 [00:05<00:04, 10.34it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 277.92it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 25.75it/s, est. speed input: 12494.90 toks/s, output: 339.62 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 25.42it/s, est. speed input: 12494.90 toks/s, output: 339.62 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 127.44it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 42.93it/s, est. speed input: 52001.97 toks/s, output: 216.58 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 41.26it/s, est. speed input: 52001.97 toks/s, output: 216.58 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 168.64it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 85.96it/s, est. speed input: 83343.34 toks/s, output: 87.36 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 82.96it/s, est. speed input: 83343.34 toks/s, output: 87.36 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  53%|█████▎    | 53/100 [00:05<00:03, 13.35it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 124.72it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 67.72it/s, est. speed input: 87646.53 toks/s, output: 68.64 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 65.31it/s, est. speed input: 87646.53 toks/s, output: 68.64 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 177.12it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.33it/s, est. speed input: 7182.17 toks/s, output: 324.74 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.33it/s, est. speed input: 7182.17 toks/s, output: 324.74 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  8.21it/s, est. speed input: 7182.17 toks/s, output: 324.74 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  55%|█████▌    | 55/100 [00:05<00:03, 13.21it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 158.01it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.19it/s, est. speed input: 10752.35 toks/s, output: 326.84 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 10.12it/s, est. speed input: 10752.35 toks/s, output: 326.84 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 152.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.80it/s, est. speed input: 3749.24 toks/s, output: 345.40 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.80it/s, est. speed input: 3749.24 toks/s, output: 345.40 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.77it/s, est. speed input: 3749.24 toks/s, output: 345.40 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  57%|█████▋    | 57/100 [00:05<00:04,  9.46it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 206.33it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.84it/s, est. speed input: 7241.70 toks/s, output: 324.94 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.84it/s, est. speed input: 7241.70 toks/s, output: 324.94 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.69it/s, est. speed input: 7241.70 toks/s, output: 324.94 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 220.94it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 57.09it/s, est. speed input: 44022.61 toks/s, output: 175.07 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 55.17it/s, est. speed input: 44022.61 toks/s, output: 175.07 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  59%|█████▉    | 59/100 [00:06<00:03, 10.47it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 216.40it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 87.85it/s, est. speed input: 61706.37 toks/s, output: 90.36 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 84.56it/s, est. speed input: 61706.37 toks/s, output: 90.36 toks/s]
-                                                                             [60/100] ID: 60 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  59%|█████▉    | 59/100 [00:06<00:03, 10.47it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 143.66it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 100.51it/s, est. speed input: 112522.07 toks/s, output: 102.25 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 96.44it/s, est. speed input: 112522.07 toks/s, output: 102.25 toks/s] 
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 239.76it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 86.80it/s, est. speed input: 54339.30 toks/s, output: 88.01 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 83.71it/s, est. speed input: 54339.30 toks/s, output: 88.01 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 142.22it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.88it/s, est. speed input: 6626.93 toks/s, output: 346.91 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.88it/s, est. speed input: 6626.93 toks/s, output: 346.91 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  5.83it/s, est. speed input: 6626.93 toks/s, output: 346.91 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  63%|██████▎   | 63/100 [00:06<00:02, 12.52it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 128.67it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s, est. speed input: 3562.38 toks/s, output: 352.26 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s, est. speed input: 3562.38 toks/s, output: 352.26 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  2.88it/s, est. speed input: 3562.38 toks/s, output: 352.26 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 202.35it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 76.32it/s, est. speed input: 63709.55 toks/s, output: 312.65 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 68.72it/s, est. speed input: 63709.55 toks/s, output: 312.65 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  65%|██████▌   | 65/100 [00:06<00:03,  9.43it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 128.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  7.35it/s, est. speed input: 8869.86 toks/s, output: 330.99 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  7.35it/s, est. speed input: 8869.86 toks/s, output: 330.99 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  7.26it/s, est. speed input: 8869.86 toks/s, output: 330.99 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 134.52it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.83s/it, est. speed input: 422.91 toks/s, output: 361.48 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.83s/it, est. speed input: 422.91 toks/s, output: 361.48 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.83s/it, est. speed input: 422.91 toks/s, output: 361.48 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  67%|██████▋   | 67/100 [00:09<00:15,  2.18it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 228.72it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 107.27it/s, est. speed input: 55639.62 toks/s, output: 218.41 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 102.54it/s, est. speed input: 55639.62 toks/s, output: 218.41 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 135.15it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 26.21it/s, est. speed input: 28626.04 toks/s, output: 292.55 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 25.82it/s, est. speed input: 28626.04 toks/s, output: 292.55 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 149.07it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 47.16it/s, est. speed input: 48781.61 toks/s, output: 190.62 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 45.96it/s, est. speed input: 48781.61 toks/s, output: 190.62 toks/s]
-                                                                             [70/100] ID: 70 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  67%|██████▋   | 67/100 [00:09<00:15,  2.18it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 160.94it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 41.18it/s, est. speed input: 42455.04 toks/s, output: 252.79 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 40.38it/s, est. speed input: 42455.04 toks/s, output: 252.79 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  71%|███████   | 71/100 [00:09<00:08,  3.57it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 150.87it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 43.55it/s, est. speed input: 50124.75 toks/s, output: 221.56 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 42.39it/s, est. speed input: 50124.75 toks/s, output: 221.56 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 148.51it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.66it/s, est. speed input: 5308.89 toks/s, output: 349.46 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.66it/s, est. speed input: 5308.89 toks/s, output: 349.46 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  4.62it/s, est. speed input: 5308.89 toks/s, output: 349.46 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  73%|███████▎  | 73/100 [00:10<00:06,  4.08it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 251.61it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 117.09it/s, est. speed input: 65947.04 toks/s, output: 238.54 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 111.65it/s, est. speed input: 65947.04 toks/s, output: 238.54 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 215.16it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.57it/s, est. speed input: 2795.32 toks/s, output: 353.34 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.57it/s, est. speed input: 2795.32 toks/s, output: 353.34 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.55it/s, est. speed input: 2795.32 toks/s, output: 353.34 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  75%|███████▌  | 75/100 [00:10<00:05,  4.50it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 185.14it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 28.66it/s, est. speed input: 24241.52 toks/s, output: 202.13 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 28.05it/s, est. speed input: 24241.52 toks/s, output: 202.13 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 140.20it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.75it/s, est. speed input: 4121.47 toks/s, output: 348.51 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.75it/s, est. speed input: 4121.47 toks/s, output: 348.51 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  3.72it/s, est. speed input: 4121.47 toks/s, output: 348.51 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  77%|███████▋  | 77/100 [00:10<00:04,  4.85it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 111.79it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 11.88it/s, est. speed input: 18055.73 toks/s, output: 310.10 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 11.78it/s, est. speed input: 18055.73 toks/s, output: 310.10 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 141.18it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 42.60it/s, est. speed input: 53130.95 toks/s, output: 216.60 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 41.32it/s, est. speed input: 53130.95 toks/s, output: 216.60 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  79%|███████▉  | 79/100 [00:10<00:03,  5.96it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 202.74it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.82s/it, est. speed input: 272.80 toks/s, output: 363.71 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.82s/it, est. speed input: 272.80 toks/s, output: 363.71 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:02<00:00,  2.82s/it, est. speed input: 272.80 toks/s, output: 363.71 toks/s]
-                                                                             [80/100] ID: 80 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  79%|███████▉  | 79/100 [00:13<00:03,  5.96it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 124.02it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 24.34it/s, est. speed input: 30872.49 toks/s, output: 270.15 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 23.93it/s, est. speed input: 30872.49 toks/s, output: 270.15 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  81%|████████  | 81/100 [00:13<00:09,  1.91it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 196.76it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 78.15it/s, est. speed input: 71931.28 toks/s, output: 80.20 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 75.01it/s, est. speed input: 71931.28 toks/s, output: 80.20 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 97.81it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.56it/s, est. speed input: 16576.23 toks/s, output: 315.46 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.56it/s, est. speed input: 16576.23 toks/s, output: 315.46 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  9.41it/s, est. speed input: 16576.23 toks/s, output: 315.46 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  83%|████████▎ | 83/100 [00:13<00:06,  2.54it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 201.68it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.20it/s, est. speed input: 4463.79 toks/s, output: 346.99 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.20it/s, est. speed input: 4463.79 toks/s, output: 346.99 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  6.14it/s, est. speed input: 4463.79 toks/s, output: 346.99 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  84%|████████▍ | 84/100 [00:14<00:05,  2.81it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 233.67it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 183.10it/s, est. speed input: 106107.33 toks/s, output: 189.19 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 169.93it/s, est. speed input: 106107.33 toks/s, output: 189.19 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 197.24it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.42it/s, est. speed input: 1171.33 toks/s, output: 360.04 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.42it/s, est. speed input: 1171.33 toks/s, output: 360.04 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00,  1.42it/s, est. speed input: 1171.33 toks/s, output: 360.04 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  86%|████████▌ | 86/100 [00:14<00:05,  2.79it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 234.23it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 53.82it/s, est. speed input: 27462.77 toks/s, output: 278.48 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 52.12it/s, est. speed input: 27462.77 toks/s, output: 278.48 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 271.53it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 185.07it/s, est. speed input: 98080.76 toks/s, output: 190.79 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 171.94it/s, est. speed input: 98080.76 toks/s, output: 190.79 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 146.39it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 78.22it/s, est. speed input: 86881.90 toks/s, output: 79.20 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 74.56it/s, est. speed input: 86881.90 toks/s, output: 79.20 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 157.47it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 45.21it/s, est. speed input: 46529.23 toks/s, output: 184.95 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 43.86it/s, est. speed input: 46529.23 toks/s, output: 184.95 toks/s]
-                                                                             [90/100] ID: 90 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  86%|████████▌ | 86/100 [00:14<00:05,  2.79it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 177.51it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 42.08it/s, est. speed input: 37329.59 toks/s, output: 341.51 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 40.67it/s, est. speed input: 37329.59 toks/s, output: 341.51 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  91%|█████████ | 91/100 [00:14<00:01,  5.57it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 162.97it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 36.83it/s, est. speed input: 42169.99 toks/s, output: 261.16 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 36.13it/s, est. speed input: 42169.99 toks/s, output: 261.16 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 137.88it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 88.87it/s, est. speed input: 111438.18 toks/s, output: 91.83 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 85.18it/s, est. speed input: 111438.18 toks/s, output: 91.83 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 277.64it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 193.69it/s, est. speed input: 100099.83 toks/s, output: 199.52 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 178.70it/s, est. speed input: 100099.83 toks/s, output: 199.52 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 236.35it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 33.04it/s, est. speed input: 21666.50 toks/s, output: 267.79 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 32.23it/s, est. speed input: 21666.50 toks/s, output: 267.79 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  95%|█████████▌| 95/100 [00:15<00:00,  8.24it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 132.06it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 62.14it/s, est. speed input: 87175.23 toks/s, output: 63.97 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 59.73it/s, est. speed input: 87175.23 toks/s, output: 63.97 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 221.91it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 34.60it/s, est. speed input: 28475.05 toks/s, output: 248.27 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 33.63it/s, est. speed input: 28475.05 toks/s, output: 248.27 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 117.97it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 81.60it/s, est. speed input: 129579.45 toks/s, output: 82.65 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 77.76it/s, est. speed input: 129579.45 toks/s, output: 82.65 toks/s]
-
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 202.08it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 80.13it/s, est. speed input: 74342.40 toks/s, output: 166.03 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 77.37it/s, est. speed input: 74342.40 toks/s, output: 166.03 toks/s]
-처리 중 (EXAONE-4.0-1.2B):  99%|█████████▉| 99/100 [00:15<00:00, 11.35it/s]
-Adding requests:   0%|          | 0/1 [00:00<?, ?it/s][AAdding requests: 100%|██████████| 1/1 [00:00<00:00, 249.39it/s]
-
-Processed prompts:   0%|          | 0/1 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s][A
-Processed prompts: 100%|██████████| 1/1 [00:00<00:00, 32.57it/s, est. speed input: 18639.11 toks/s, output: 332.94 toks/s][AProcessed prompts: 100%|██████████| 1/1 [00:00<00:00, 31.81it/s, est. speed input: 18639.11 toks/s, output: 332.94 toks/s]
-                                                                             [100/100] ID: 100 - 처리 완료
-처리 중 (EXAONE-4.0-1.2B):  99%|█████████▉| 99/100 [00:15<00:00, 11.35it/s]처리 중 (EXAONE-4.0-1.2B): 100%|██████████| 100/100 [00:15<00:00,  6.60it/s]
-
-처리 완료: 총 100개 중 100개 성공, 0개 실패
-
-결과 저장 완료: /workspace/Fin-Ben/eval/_results/3_fin_toxicity/3_fin_toxicity_EXAONE-4.0-1.2B_answer.csv
-
-[3/3] 모델 메모리 해제 중...
-✓ LGAI-EXAONE/EXAONE-4.0-1.2B 처리 완료
-
-모델 캐시 삭제 중: /workspace/.cache/huggingface/hub/models--LGAI-EXAONE--EXAONE-4.0-1.2B
-✓ 모델 캐시 삭제 완료: LGAI-EXAONE/EXAONE-4.0-1.2B
-
-============================================================
-모든 모델 처리 완료!
-============================================================
-
-GPU 메모리 정리 완료

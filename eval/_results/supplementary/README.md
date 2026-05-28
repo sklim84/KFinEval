@@ -21,14 +21,17 @@ rebuttal record that originally accompanied these experiments).
 
 ## Running
 
-Each subdirectory is self-contained. Scripts assume benchmark outputs live
-under `eval/_results/` (per-domain CSV files produced by the
-`1_*`, `2_*`, `3_*` pipelines in `eval/`).
+Each subdirectory is self-contained. Scripts read 1st-stage benchmark outputs
+from sibling directories (`eval/_results/1_fin_knowledge/`,
+`eval/_results/2_fin_reasoning/`, `eval/_results/3_fin_toxicity/`) produced by
+the `1_*`, `2_*`, `3_*` gen pipelines in `eval/`. Paths are hardcoded as
+absolute (`/home/work/kftc_model/KFinEval/eval/_results/...`) so analysis
+scripts remain invariant to where this directory sits in the tree.
 
 Example:
 
 ```bash
-cd eval/supplementary/wilson_ci
+cd eval/_results/supplementary/wilson_ci
 python wilson_ci.py    # writes wilson_ci_knowledge.csv + wilson_ci_summary.md
 ```
 
@@ -36,6 +39,6 @@ python wilson_ci.py    # writes wilson_ci_knowledge.csv + wilson_ci_summary.md
 
 The original copies of these experiments, as submitted during the KDD 2026
 rebuttal, remain in `_manuscript/rebuttal/exp/`. Changes made after the
-rebuttal round should be applied here (`eval/supplementary/`), not to the
+rebuttal round should be applied here (`eval/_results/supplementary/`), not to the
 rebuttal-side tree, to keep the rebuttal record immutable while letting the
 camera-ready / next-submission analyses evolve.

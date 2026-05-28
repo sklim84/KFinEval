@@ -22,12 +22,17 @@ KFinEval/
 ├── aug/                        # Data augmentation scripts
 │   ├── 2_*                     # Reasoning data augmentation
 │   └── 3_*                     # Toxicity data augmentation
-├── utils/                      # Utility scripts
-├── _logs/                      # Execution logs
 ├── run_knowledge.sh            # Knowledge evaluation runner
 ├── run_reasoning.sh            # Reasoning evaluation runner
 ├── run_toxicity.sh             # Toxicity evaluation runner
+├── run_vllm_env.sh             # vLLM env wrapper (knowledge / reasoning / toxicity)
+├── run_hf_direct_env.sh        # HF transformers direct env wrapper
+├── run_vaetki_env.sh           # VAETKI vLLM plugin venv wrapper
 └── requirements.txt            # Python package dependencies
+
+# Untracked at runtime (.gitignore):
+#   eval/_logs/                 # Run logs (stdout / progress bars)
+#   eval/_eval_pylib/           # transformers 5.5.1 etc. installed via `pip install -t`
 ```
 
 ## Evaluation Areas
@@ -41,12 +46,11 @@ KFinEval/
 - Various financial domain categories (accounting, economics, financial management, financial markets, etc.)
 
 **Scripts**:
-- `1_1_eval_knowledge_openlm.py`: Response generation using vLLM
-- `1_1_eval_knowledge_openai.py`: Response generation using OpenAI API
-- `1_1_eval_knowledge_claude.py`: Response generation using Anthropic Claude API (with Structured Outputs)
-- `1_1_eval_knowledge_gpt20b.py`: GPT-OSS-20B model evaluation (using Transformers directly)
-- `1_1_eval_knowledge_gpt120b.py`: GPT-OSS-120B model evaluation (using vLLM)
-- `1_2_stats_eval_knowledge.py`: Statistics calculation and accuracy analysis
+- `1_1_eval_knowledge_vllm.py`: Response generation using vLLM (local open-weight models). Default: structured outputs force A–E. `--think`: free generation for reasoning models (larger `max_tokens`, post-process via `</think>` + regex).
+- `1_1_eval_knowledge_openrouter.py`: Response generation via OpenRouter (proprietary and OpenRouter-hosted models). Default: `response_format` json_schema forces A–E. `--think`: free generation for reasoning models.
+- `1_1_eval_knowledge_hf_direct.py`: Response generation using HuggingFace Transformers directly (for models vLLM cannot register, e.g. Solar-Open-100B). Always free generation + regex. Run via `./run_hf_direct_env.sh`.
+- `1_1_eval_knowledge_vaetki.py`: Response generation using the VAETKI vLLM plugin (vllm==0.11.2 pinned). Run via `./run_vaetki_env.sh`.
+- `1_2_stats_eval_knowledge.py`: Statistics calculation and accuracy analysis. Adds `is_correct`, writes `_response_stats.json`. `--llm-judge`: use an LLM (OpenRouter `openai/gpt-5.2` by default) to judge correctness from `raw_response`, recommended for `--think` / hf_direct / vaetki outputs.
 
 **Output Format**:
 - Response file: `_results/1_fin_knowledge/1_fin_knowledge_{model}_response.csv`
@@ -67,10 +71,10 @@ KFinEval/
 - Expert-verified gold answers
 
 **Scripts**:
-- `2_1_gen_reasoning_openlm.py`: Reasoning response generation using vLLM
-- `2_1_gen_reasoning_openai.py`: Reasoning response generation using OpenAI API
-- `2_1_gen_reasoning_claude.py`: Reasoning response generation using Anthropic Claude API
-- `2_2_eval_reasoning_openai.py`: Reasoning response evaluation using OpenAI API (LLM-as-a-Judge)
+- `2_1_gen_reasoning_vllm.py`: Reasoning response generation using vLLM (local open-weight models)
+- `2_1_gen_reasoning_openrouter.py`: Reasoning response generation via OpenRouter (proprietary and OpenRouter-hosted models)
+- `2_1_gen_reasoning_hf_direct.py`: Reasoning response generation using HuggingFace Transformers directly (for models vLLM cannot register). Run via `./run_hf_direct_env.sh`.
+- `2_1_gen_reasoning_vaetki.py`: Reasoning response generation using the VAETKI vLLM plugin. Run via `./run_vaetki_env.sh`.
 - `2_2_eval_reasoning_openrouter.py`: Reasoning response evaluation via OpenRouter (LLM-as-a-Judge; default judge `openai/gpt-5.2`, also Claude/Llama)
 - `2_3_stats_eval_reasoning.py`: Statistics calculation
 
@@ -97,11 +101,10 @@ KFinEval/
 - Attack methods (attack_method)
 
 **Scripts**:
-- `3_1_gen_toxicity_openlm.py`: Toxicity response generation using vLLM
-- `3_1_gen_toxicity_openai.py`: Toxicity response generation using OpenAI API
-- `3_1_gen_toxicity_openrouter.py`: Toxicity response generation via OpenRouter
-- `3_1_gen_toxicity_claude.py`: Toxicity response generation using Anthropic Claude API
-- `3_2_eval_toxicity_openai.py`: Toxicity evaluation using OpenAI API (LLM-as-a-Judge)
+- `3_1_gen_toxicity_vllm.py`: Toxicity response generation using vLLM (local open-weight models)
+- `3_1_gen_toxicity_hf_direct.py`: Toxicity response generation using HuggingFace Transformers (models vLLM cannot load, e.g. Solar-Open-100B)
+- `3_1_gen_toxicity_vaetki.py`: Toxicity response generation for the VAETKI model via its vendor vLLM plugin
+- `3_1_gen_toxicity_openrouter.py`: Toxicity response generation via OpenRouter (proprietary and OpenRouter-hosted models)
 - `3_2_eval_toxicity_openrouter.py`: Toxicity evaluation via OpenRouter (LLM-as-a-Judge)
 - `3_3_stats_eval_toxicity.py`: Statistics calculation
 
@@ -144,19 +147,20 @@ Generate model responses for each evaluation area.
 
 ```bash
 # Financial Knowledge evaluation
-python eval/1_1_eval_knowledge_openlm.py      # For vLLM models
-python eval/1_1_eval_knowledge_openai.py      # For OpenAI API models
-python eval/1_1_eval_knowledge_claude.py      # For Anthropic Claude API models
+python eval/1_1_eval_knowledge_vllm.py                                            # Local vLLM, structured A–E (non-reasoning models)
+python eval/1_1_eval_knowledge_vllm.py --think                                    # Local vLLM, free generation (reasoning models)
+python eval/1_1_eval_knowledge_openrouter.py --model openai/gpt-5.2               # OpenRouter, structured A–E
+python eval/1_1_eval_knowledge_openrouter.py --model deepseek/deepseek-r1 --think # OpenRouter, free generation (reasoning models)
 
 # Financial Reasoning evaluation
-python eval/2_1_gen_reasoning_openlm.py       # For vLLM models
-python eval/2_1_gen_reasoning_openai.py       # For OpenAI API models
-python eval/2_1_gen_reasoning_claude.py       # For Anthropic Claude API models
+python eval/2_1_gen_reasoning_vllm.py                                     # For local vLLM open-weight models
+python eval/2_1_gen_reasoning_openrouter.py --model openai/gpt-5.2          # For OpenRouter-hosted / proprietary models
 
 # Financial Toxicity evaluation
-python eval/3_1_gen_toxicity_openlm.py        # For vLLM models
-python eval/3_1_gen_toxicity_openai.py        # For OpenAI API models
-python eval/3_1_gen_toxicity_claude.py        # For Anthropic Claude API models
+python eval/3_1_gen_toxicity_vllm.py        # For local vLLM open-weight models
+python eval/3_1_gen_toxicity_hf_direct.py     # For models vLLM cannot load (e.g. Solar-Open-100B)
+python eval/3_1_gen_toxicity_vaetki.py        # For the VAETKI model (vendor plugin)
+python eval/3_1_gen_toxicity_openrouter.py    # For proprietary / OpenRouter-hosted models
 ```
 
 #### Step 2: Evaluate Responses (LLM-as-a-Judge)
@@ -165,12 +169,10 @@ Evaluate generated responses (Financial Knowledge only requires answer compariso
 
 ```bash
 # Financial Reasoning evaluation
-python eval/2_2_eval_reasoning_openai.py
 python eval/2_2_eval_reasoning_openrouter.py --target-model <model> --judge-model openai/gpt-5.2
 
 # Financial Toxicity evaluation
-python eval/3_2_eval_toxicity_openai.py
-python eval/3_2_eval_toxicity_openrouter.py
+python eval/3_2_eval_toxicity_openrouter.py --all-done
 ```
 
 #### Step 3: Calculate Statistics
@@ -179,7 +181,8 @@ Calculate statistics from evaluation results.
 
 ```bash
 # Financial Knowledge statistics
-python eval/1_2_stats_eval_knowledge.py
+python eval/1_2_stats_eval_knowledge.py                  # Simple string match (default)
+python eval/1_2_stats_eval_knowledge.py --llm-judge      # LLM judge via OpenRouter (recommended for --think outputs)
 
 # Financial Reasoning statistics
 python eval/2_3_stats_eval_reasoning.py
@@ -227,7 +230,7 @@ The `aug/` directory contains scripts for dataset augmentation.
 
 ## Model Support
 
-### vLLM-based Evaluation (`*_openlm.py`)
+### vLLM-based Evaluation (`*_vllm.py`)
 - Direct HuggingFace model loading
 - Multi-GPU support (tensor_parallel_size)
 - GPU memory optimization
@@ -261,12 +264,28 @@ The `aug/` directory contains scripts for dataset augmentation.
 pip install -r requirements.txt
 ```
 
+### Eval-only newer transformers (`eval/_eval_pylib/`)
+
+Some sovereign-LLM architectures (`ExaoneMoE`, `SolarOpenForCausalLM`, etc.) are
+**not registered in `transformers<5.5`**. The `run_vllm_env.sh` and
+`run_hf_direct_env.sh` wrappers prepend a dedicated directory
+`eval/_eval_pylib/` to `PYTHONPATH` so eval scripts see `transformers 5.5.1`
+even when the system Python ships an older version.
+
+This directory is **untracked** (gitignored, ~225 MB). Set it up once on a new
+machine if you plan to run any local vLLM / HF-direct generation:
+
+```bash
+pip install transformers==5.5.1 -t eval/_eval_pylib
+```
+
+Skip this step if you only use the OpenRouter backend (`*_openrouter.py`).
+
 ### Key Packages
 
-- `vllm>=0.13.0`: For vLLM-based model loading
-- `transformers>=4.57.0`: For direct Transformers usage
-- `openai>=2.14.0`: For OpenAI API
-- `anthropic>=0.71.0`: For Anthropic Claude API (with Structured Outputs support)
+- `vllm>=0.13.0`: For vLLM-based model loading (local open-weight models)
+- `transformers>=4.57.0`: For direct Transformers usage (system-wide); see also `eval/_eval_pylib/` above for the newer 5.5.1 used by eval-only scripts
+- `openai>=2.14.0`: For OpenRouter (and OpenAI-compatible APIs)
 - `pandas>=2.3.0`: For data processing
 - `tqdm>=4.67.0`: For progress display
 

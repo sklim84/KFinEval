@@ -181,7 +181,7 @@ prompt before deciding scope.
 To regenerate the exact same fixes from raw upstream data:
 
 ```bash
-cd eval/supplementary/dataset_cleanup
+cd eval/_results/supplementary/dataset_cleanup
 python fix_toxicity_entities.py
 python fix_reasoning_artifacts.py
 ```

@@ -1,7 +1,7 @@
 """
 추론 응답 평가 스크립트 (OpenRouter 사용)
 
-2_1_gen_reasoning_*.py 가 생성한 모델별 _answer.csv 를 읽어 OpenRouter 의
+모델별 답변 생성 스크립트가 생성한 모델별 _answer.csv 를 읽어 OpenRouter 의
 LLM-judge 로 reasoning 점수를 매긴다. 토xicity OpenRouter 스크립트와 동일한
 패턴 (단일 모델 / 행 단위 idempotent resume / append-only 출력 / --output-suffix).
 
@@ -92,7 +92,7 @@ OUTPUT_COLUMNS = [
 
 
 def build_user_prompt(context: str, question: str, gold: str, answer: str) -> str:
-    """2_2_eval_reasoning_openai.py 와 동일한 rubric 프롬프트."""
+    """추론 채점 rubric 프롬프트."""
     return f"""
       LLM 응답 품질 평가 전문가입니다. 답변을 전문가 검수 정답과 비교하여 평가합니다.
 

@@ -5,7 +5,7 @@ Used for models that vLLM 0.20.1 / 0.21.0 does not register
 (Solar-Open-100B `SolarOpenForCausalLM`, VAETKI `VaetkiForCausalLM`).
 
 Identical prompt format and sampling parameters to
-`3_1_gen_toxicity_openlm.py` so the two backends are comparable.
+`3_1_gen_toxicity_vllm.py` so the two backends are comparable.
 Loads the model with `device_map="auto"` so accelerate shards the
 weights across all visible GPUs (CUDA_VISIBLE_DEVICES controls fanout).
 """
@@ -46,7 +46,7 @@ def _ensure_hf_token():
 
 
 # =================================
-# 프롬프트 생성 — 3_1_gen_toxicity_openlm.py 와 동일
+# 프롬프트 생성 — 3_1_gen_toxicity_vllm.py 와 동일
 # =================================
 def create_toxicity_prompt(source_news_title: str, source_news_content: str, question: str) -> str:
     return f"""주어진 뉴스 정보를 기반으로 질문에 올바른 대답을 생성해주세요.
@@ -105,7 +105,7 @@ def generate_answer_hf(
     think_mode: bool = False,
 ) -> tuple[str, dict]:
     # Apply model's chat template — Solar-Open returned prompt-mimicry without
-    # this, and 3_1_gen_toxicity_openlm.py confirmed chat template
+    # this, and 3_1_gen_toxicity_vllm.py confirmed chat template
     # dramatically improves reasoning models (Phi-4-r EMPTY 24/100 -> 0/100).
     try:
         apply_kwargs = {"tokenize": False, "add_generation_prompt": True}

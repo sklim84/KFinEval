@@ -1,15 +1,27 @@
 """
 LLM 모델 평가 결과 통계 계산 스크립트
 
-이 스크립트는 1_1_eval_knowledge.py에서 생성된 CSV 파일을 읽어서
-정답 비교 및 통계를 계산하고 결과를 저장합니다.
+`1_1_eval_knowledge_{vllm,openrouter}.py` 가 생성한 `_response.csv` 를 읽어
+정답 비교, `is_correct` 추가, `_response_stats.json` 생성.
+
+옵션:
+  기본       : 단순 문자열 매치 (`check_answer(answer, gold)`)
+  --llm-judge: LLM judge (기본 OpenRouter `openai/gpt-5.2`) 로 정답 여부 판별.
+               --think 모드 자유 출력의 정확 판정을 위해 사용.
+               (구 1_2_eval_plus_judge_knowledge_response.py 의 기능 흡수)
 """
 
+import argparse
 import pandas as pd
 import os
 import json
 import glob
+import threading
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from typing import Optional, Dict, List
+
+from tqdm import tqdm
 
 
 # =================================
@@ -399,18 +411,149 @@ def create_model_category_dataframe(all_stats: List[Dict]) -> pd.DataFrame:
 # =================================
 # CSV 파일 처리 함수
 # =================================
+# =================================
+# LLM-as-Judge (옵션, --llm-judge)
+# =================================
+_judge_client = None  # 지연 초기화
+_judge_lock = threading.Lock()
+
+
+def _get_judge_client():
+    """OpenRouter judge 클라이언트 (지연 초기화). `--llm-judge` 사용 시에만 필요."""
+    global _judge_client
+    if _judge_client is None:
+        from dotenv import load_dotenv  # 옵션 import (--llm-judge 미사용 시 의존성 불필요)
+        from openai import OpenAI
+        repo_root = Path(__file__).resolve().parent.parent
+        load_dotenv(repo_root / ".env")
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                f"OPENROUTER_API_KEY not set. Add it to {repo_root}/.env or export it."
+            )
+        _judge_client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=api_key,
+            default_headers={
+                "HTTP-Referer": "https://github.com/sklim84/KFinEval",
+                "X-Title": "KFinEval Knowledge LLM Judge",
+            },
+        )
+    return _judge_client
+
+
+def _strip_think(raw: str) -> str:
+    """`</think>` 뒤 텍스트만 반환 (구 plus_judge.extract_answer 동일)."""
+    if not raw:
+        return ""
+    if "</think>" in raw:
+        return raw.split("</think>")[-1].strip()
+    return raw.strip()
+
+
+def _judge_prompt(gold: str, stripped: str) -> str:
+    """plus_judge 와 동일 문구."""
+    return (
+        f"""다음 객관식 문제의 정답과 모델 응답을 비교하여 정답 여부를 판별하세요.
+
+정답: {gold}
+모델 응답: {stripped}
+
+모델 응답이 정답과 일치하면 "CORRECT", 일치하지 않으면 "INCORRECT"를 출력하세요.
+모델 응답에서 정답 알파벳(A, B, C, D, E)이 명시적으로 언급되어 있는지 확인하세요.
+
+판별 결과:"""
+    )
+
+
+def _judge_one(gold: str, raw_response: str, judge_model: str, max_retries: int = 3) -> str:
+    """단일 행 판정 → "CORRECT" / "INCORRECT" / "ERROR"
+
+    Reasoning 모델(예: openai/gpt-5.2)에 max_tokens=10 만 주면 reasoning 토큰만
+    소비하고 content=None 으로 끝나는 함정이 있다. `2_2_eval_reasoning_openrouter.py`
+    의 build_request_kwargs 와 같이 `extra_body.reasoning.effort=none` 을 명시해서
+    reasoning 토큰을 끔 (judge 는 단순 "CORRECT"/"INCORRECT" 분류라 reasoning 불필요).
+    """
+    stripped = _strip_think(str(raw_response or ""))
+    if not stripped:
+        return "INCORRECT"
+    client = _get_judge_client()
+    last_exc = None
+    for _ in range(max_retries):
+        try:
+            # max_tokens=32: OpenRouter→Azure(gpt-5.2) 는 max_output_tokens >= 16
+            # 을 강제(아래는 400 BadRequest)하므로 안전 마진 포함. "CORRECT"/"INCORRECT"
+            # 한 단어만 필요한 분류라 32 면 충분.
+            resp = client.chat.completions.create(
+                model=judge_model,
+                messages=[{"role": "user", "content": _judge_prompt(str(gold), stripped)}],
+                max_tokens=32,
+                temperature=0.0,
+                extra_body={"reasoning": {"effort": "none"}},
+            )
+            result = (resp.choices[0].message.content or "").strip().upper()
+            if "CORRECT" in result and "INCORRECT" not in result:
+                return "CORRECT"
+            if "INCORRECT" in result:
+                return "INCORRECT"
+            return result or "ERROR"
+        except Exception as e:
+            last_exc = e
+    print(f"  [judge] 실패: {last_exc}")
+    return "ERROR"
+
+
+def llm_judge_dataframe(
+    data: pd.DataFrame,
+    model_name: str,
+    judge_model: str,
+    workers: int,
+) -> pd.DataFrame:
+    """`llm_judge` 컬럼 추가 → CORRECT/INCORRECT/ERROR. raw_response 필수."""
+    if "raw_response" not in data.columns:
+        raise RuntimeError(
+            "--llm-judge: 'raw_response' 컬럼이 없습니다. --think 생성 결과여야 합니다."
+        )
+    records = data.to_dict(orient="records")
+
+    def _w(r):
+        return _judge_one(r["gold"], r.get("raw_response", ""), judge_model)
+
+    results: List[str] = [None] * len(records)
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futs = {ex.submit(_w, r): i for i, r in enumerate(records)}
+        pbar = tqdm(total=len(futs), desc=f"LLM judge ({model_name})")
+        for fut in futs:
+            try:
+                results[futs[fut]] = fut.result()
+            except Exception as e:
+                results[futs[fut]] = "ERROR"
+                print(f"  [judge] worker 실패: {e}")
+            pbar.update(1)
+        pbar.close()
+    data = data.copy()
+    data["llm_judge"] = results
+    return data
+
+
 def process_csv(
     input_csv_path: str,
     output_csv_path: str,
-    model_name: str
+    model_name: str,
+    llm_judge: bool = False,
+    judge_model: str = "openai/gpt-5.2",
+    judge_workers: int = 4,
 ) -> Optional[Dict]:
     """
     CSV 파일을 읽어서 정답 비교 및 통계 계산 수행
-    
+
     Args:
-        input_csv_path: 입력 CSV 파일 경로 (1_1_eval_knowledge.py에서 생성된 파일)
+        input_csv_path: 입력 CSV 파일 경로 (1_1_eval_knowledge_*.py 가 생성)
         output_csv_path: 출력 CSV 파일 경로 (정답 여부 컬럼이 추가된 파일)
         model_name: 모델 이름
+        llm_judge: True 시 LLM judge 로 is_correct 판정 (raw_response 필요)
+        judge_model: judge 모델 (OpenRouter id, 기본 openai/gpt-5.2)
+        judge_workers: judge 호출 동시성
     """
     # 입력 CSV 파일 읽기
     try:
@@ -418,20 +561,27 @@ def process_csv(
     except Exception as e:
         print(f"CSV 파일 읽기 오류: {e}")
         return None
-    
+
     answer_col = f"answer"
-    
+
     # 모델 답변 컬럼이 있는지 확인
     if answer_col not in data.columns:
         print(f"오류: '{answer_col}' 컬럼을 찾을 수 없습니다.")
         return None
-    
-    # 정답 여부 확인 및 컬럼 추가
+
+    # 정답 여부 컬럼
     is_correct_col = f"is_correct"
-    data[is_correct_col] = data.apply(
-        lambda row: check_answer(row[answer_col], row['gold']),
-        axis=1
-    )
+
+    if llm_judge:
+        # LLM judge 모드: raw_response 기반 판정
+        data = llm_judge_dataframe(data, model_name, judge_model, judge_workers)
+        data[is_correct_col] = data["llm_judge"] == "CORRECT"
+    else:
+        # 기본: 단순 문자열 매치
+        data[is_correct_col] = data.apply(
+            lambda row: check_answer(row[answer_col], row['gold']),
+            axis=1
+        )
     
     # 통계 계산
     stats = calculate_statistics(data, model_name)
@@ -459,25 +609,42 @@ def process_csv(
 # 메인 실행 로직
 # =================================
 if __name__ == "__main__":
+    # ==========================================
+    # CLI 인자
+    # ==========================================
+    _cli = argparse.ArgumentParser(description="Knowledge stats / scoring")
+    _cli.add_argument("--llm-judge", action="store_true",
+                      help="raw_response 기반 LLM judge 로 is_correct 판정 "
+                           "(--think 생성물에 사용 권장). 미사용 시 단순 문자열 매치.")
+    _cli.add_argument("--judge-model", default="openai/gpt-5.2",
+                      help="LLM judge 모델 (OpenRouter id, 기본 openai/gpt-5.2)")
+    _cli.add_argument("--judge-workers", type=int, default=4,
+                      help="LLM judge 동시성 (기본 4)")
+    _cli.add_argument("--pattern", default=None,
+                      help="입력 파일 글롭 패턴 override (기본 *_response.csv). 특정 모델만 처리할 때 사용")
+    _args = _cli.parse_args()
+
     try:
         # ==========================================
         # 1단계: 처리할 결과 파일 설정
-        # 
+        #
         # 주의사항: 통계 계산 전에 결과 파일을 확인하세요.
         # - answer 컬럼이 비어있거나 형식이 잘못된 경우, answer_text 컬럼을 확인하여
         #   수작업으로 올바른 답변(A~E)을 answer 컬럼에 입력해주세요.
         # ==========================================
         # 결과 디렉토리
         results_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_results/1_fin_knowledge")
-        
-        # 처리할 파일 패턴 (예: 1_fin_knowledge_*_response.csv)
-        # 또는 특정 파일 리스트 지정 가능
-        input_pattern = os.path.join(results_dir, "1_fin_knowledge_*_response.csv")
+
+        # 처리할 파일 패턴
+        input_pattern = _args.pattern or os.path.join(results_dir, "1_fin_knowledge_*_response.csv")
         input_files = glob.glob(input_pattern)
-        
+
         if not input_files:
             print(f"처리할 파일을 찾을 수 없습니다: {input_pattern}")
             exit(1)
+
+        if _args.llm_judge:
+            print(f"[LLM-judge ON] judge={_args.judge_model} workers={_args.judge_workers}")
         
         print("=" * 60)
         print("평가 결과 통계 계산 모드")
@@ -513,7 +680,12 @@ if __name__ == "__main__":
             output_file = input_file  # 같은 파일에 덮어쓰기 (정답 여부 컬럼 추가)
             
             # CSV 처리 및 통계 계산 실행
-            stats = process_csv(input_file, output_file, model_name)
+            stats = process_csv(
+                input_file, output_file, model_name,
+                llm_judge=_args.llm_judge,
+                judge_model=_args.judge_model,
+                judge_workers=_args.judge_workers,
+            )
             
             # 통계 수집 (카테고리별 통계가 있는 경우만)
             if stats and 'by_category' in stats:

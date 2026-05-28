@@ -6,8 +6,10 @@ LLM 모델 평가 스크립트 (답변 생성 전용)
 정답 비교 및 통계 계산은 1_2_stats_knowledge.py에서 수행합니다.
 """
 
+import argparse
 import pandas as pd
 import os
+import re
 import torch
 import shutil
 import json
@@ -15,6 +17,27 @@ from typing import Optional, Tuple
 from vllm import LLM, SamplingParams
 from vllm.sampling_params import StructuredOutputsParams
 from tqdm import tqdm
+
+
+def parse_mcq_answer_freeform(content: str):
+    """추론 모델 자유 출력에서 A~E 추출 (--think 모드용).
+    - `</think>` 뒤 텍스트만 사용
+    - 그 다음 첫 A~E 글자
+    (구 1_1_eval_plus_run_plain_eval.parse_knowledge_answer 와 동일 동작)
+    """
+    if not content:
+        return None
+    if "</think>" in content:
+        content = content.split("</think>")[-1]
+    s = content.strip().upper()
+    if not s:
+        return None
+    if s[0] in "ABCDE":
+        return s[0]
+    for ch in "ABCDE":
+        if ch in s:
+            return ch
+    return None
 
 # HuggingFace 토큰 설정 (gated repository 접근용)
 # 환경 변수에 토큰이 없으면 기본 토큰 사용
@@ -223,7 +246,9 @@ def process_csv(
     model_name: str,
     input_csv_path: str,
     output_csv_path: str,
-    sampling_params: SamplingParams
+    sampling_params: SamplingParams,
+    think: bool = False,
+    limit: Optional[int] = None,
 ) -> None:
     """
     CSV 파일을 읽어서 모델로 답변 생성 수행 (단일 처리)
@@ -237,6 +262,9 @@ def process_csv(
     """
     # 입력 CSV 파일 읽기
     data = pd.read_csv(input_csv_path)
+    if limit:
+        data = data.head(limit)
+        print(f"  [limit] 앞 {limit} 행만 처리")
 
     # 결과 저장용 리스트
     results = []
@@ -273,7 +301,11 @@ def process_csv(
             answer, outputs_text = generate_answer_single(
                 model, prompt, sampling_params
             )
-            
+
+            # --think 모드: 자유 생성된 raw 출력에서 A~E 추출
+            if think and answer is not None:
+                answer = parse_mcq_answer_freeform(answer)
+
             # 결과 저장
             result_row = {
                 'id': _id,
@@ -290,7 +322,11 @@ def process_csv(
                 'E': E,
                 'gold': gold,
                 "answer": answer,
-                "outputs_text": outputs_text,
+                # 다른 backend (openrouter / hf_direct / vaetki) 와 컬럼 contract 일치:
+                # answer_structured (think 모드 미사용) + raw_response (전체 vLLM output).
+                # 이렇게 두면 1_2_stats_eval_knowledge.py --llm-judge 가 모든 backend에서 동작.
+                "answer_structured": None,
+                "raw_response": outputs_text,
             }
             
             results.append(result_row)
@@ -327,6 +363,24 @@ def process_csv(
 # 메인 실행 로직
 # =================================
 if __name__ == "__main__":
+    # ==========================================
+    # CLI 인자
+    #   --think : 추론 모델 모드 (StructuredOutputsParams 미사용, max_tokens 크게)
+    #   --max-tokens N : 명시적 max_tokens 지정 (기본: think=8192, structured=5)
+    # ==========================================
+    _cli = argparse.ArgumentParser(add_help=True)
+    _cli.add_argument("--think", action="store_true",
+                      help="추론 모델 모드: structured 미사용, max_tokens 크게, "
+                           "</think>+regex 로 A~E 추출. 정밀 판정은 1_2_stats_eval_knowledge.py --llm-judge 사용.")
+    _cli.add_argument("--max-tokens", type=int, default=None,
+                      help="max_tokens override (기본: --think 시 8192, structured 시 5)")
+    _cli.add_argument("--limit", type=int, default=None,
+                      help="앞 N개만 처리 (디버그/스모크 테스트)")
+    _args, _ = _cli.parse_known_args()
+    THINK = _args.think
+    MAX_TOKENS = _args.max_tokens if _args.max_tokens is not None else (8192 if THINK else 5)
+    LIMIT = _args.limit
+
     try:
         # ==========================================
         # 1단계: 평가할 모델 설정 (추가 모델: huggingface 모델경로)
@@ -367,20 +421,33 @@ if __name__ == "__main__":
         # ==========================================
         # 2단계: 벤치마크 데이터셋 설정
         # ==========================================
-        file_path = "/workspace/Fin-Ben/_datasets/0_integration"
+        # 데이터셋 경로 (스크립트 위치 기반 동적; 옛 환경 /workspace/Fin-Ben 경로 의존 제거)
+        file_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "_datasets", "0_integration",
+        )
         benchmark_list = [
             "1_fin_knowledge.csv"
         ]
         
-        structured_params = StructuredOutputsParams(
-            choice=["A", "B", "C", "D", "E"]
-        )
-        sampling_params = SamplingParams(
-            temperature=0.0,
-            max_tokens=5,
-            seed=2025, 
-            structured_outputs=structured_params
-        )
+        if THINK:
+            # 추론 모델 모드: 자유 생성, structured 미사용
+            sampling_params = SamplingParams(
+                temperature=0.0,
+                max_tokens=MAX_TOKENS,  # 기본 8192
+                seed=2025,
+            )
+        else:
+            # 비추론 모델: structured 로 A~E 강제
+            structured_params = StructuredOutputsParams(
+                choice=["A", "B", "C", "D", "E"]
+            )
+            sampling_params = SamplingParams(
+                temperature=0.0,
+                max_tokens=MAX_TOKENS,  # 기본 5
+                seed=2025,
+                structured_outputs=structured_params,
+            )
         # ==========================================
         # 3단계: 설정 정보 출력
         # ==========================================
@@ -447,7 +514,7 @@ if __name__ == "__main__":
                 )
                 
                 # CSV 처리 및 평가 실행
-                process_csv(model, model_name, input_csv_path, output_csv_path, sampling_params)
+                process_csv(model, model_name, input_csv_path, output_csv_path, sampling_params, think=THINK, limit=LIMIT)
                 
                 print(f"  ✓ {benchmark_name} 평가 완료")
             

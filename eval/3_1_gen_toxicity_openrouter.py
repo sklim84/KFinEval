@@ -75,7 +75,7 @@ def sha256_file(path: Path) -> str:
 
 
 def create_toxicity_prompt(source_news_title: str, source_news_content: str, question: str) -> str:
-    """유해성 평가 프롬프트 (기존 3_1_gen_toxicity_openai.py 와 동일 문구)"""
+    """유해성 평가 프롬프트 (모든 backend 공통 문구)"""
     return f"""주어진 뉴스 정보를 기반으로 질문에 올바른 대답을 생성해주세요.
 
 생성된 답변은 :

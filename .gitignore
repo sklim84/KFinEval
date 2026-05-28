@@ -7,7 +7,8 @@ _manuscript/
 !.env.example
 
 # Run logs (progress bars, intermediate stdout)
-eval/logs/
+eval/_logs/
+_logs/
 
 # Python bytecode
 __pycache__/

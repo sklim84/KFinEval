@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 RESULTS_DIR = Path("/home/work/kftc_model/KFinEval/eval/_results")
-OUTPUT_DIR = Path("/home/work/kftc_model/KFinEval/eval/supplementary/wilson_ci")
+OUTPUT_DIR = Path("/home/work/kftc_model/KFinEval/eval/_results/supplementary/wilson_ci")
 
 Z_95 = 1.959963984540054  # scipy.stats.norm.ppf(0.975)
 

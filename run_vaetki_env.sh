@@ -9,12 +9,20 @@
 #    stack. PYTHONPATH must be unset, otherwise the user-local site-packages
 #    leaks system vllm 0.20.1 (no VaetkiForCausalLM, would silently fall
 #    back and crash).
+#
+# Usage (benchmark-agnostic):
+#   ./run_vaetki_env.sh eval/1_1_eval_knowledge_vaetki.py --hf-model <id>
+#   ./run_vaetki_env.sh eval/2_1_gen_reasoning_vaetki.py  --hf-model <id>
+#   ./run_vaetki_env.sh eval/3_1_gen_toxicity_vaetki.py   --model <name>
+#
+# Backwards compat: if the first arg is not a `.py` path, falls back to
+#   eval/3_1_gen_toxicity_vaetki.py (the original target).
 set -euo pipefail
 
 # Critical: kill PYTHONPATH so venv site-packages take precedence.
 unset PYTHONPATH
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 VAETKI_VENV=/home/work/kftc_model/vaetki_venv
 
 source "$VAETKI_VENV/bin/activate"
@@ -33,4 +41,10 @@ if [ -f "$REPO_ROOT/.env" ]; then
   fi
 fi
 
-exec python "$REPO_ROOT/eval/3_1_gen_toxicity_vaetki.py" "$@"
+if [[ "${1:-}" == *.py ]]; then
+  SCRIPT_REL="$1"; shift
+else
+  SCRIPT_REL="eval/3_1_gen_toxicity_vaetki.py"
+fi
+
+exec python "$REPO_ROOT/$SCRIPT_REL" "$@"

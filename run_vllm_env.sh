@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run vLLM-based toxicity generation in an environment compatible with the
+# Run a vLLM-based benchmark gen script in an environment compatible with the
 # concurrently-running training job's user-local Python install.
 #
 # Why this wrapper exists:
@@ -10,10 +10,18 @@
 #   - We reuse user-local site-packages (where the training job's torch + vllm
 #     live, both v2.11.0+cu130 / 0.20.1) and the shared HF / vLLM cache under
 #     /home/work/kftc_model/.cache so models are not re-downloaded.
+#
+# Usage (benchmark-agnostic):
+#   ./run_vllm_env.sh eval/1_1_eval_knowledge_vllm.py --think
+#   ./run_vllm_env.sh eval/2_1_gen_reasoning_vllm.py
+#   ./run_vllm_env.sh eval/3_1_gen_toxicity_vllm.py  --model <name>
+#
+# Backwards compat: if the first arg is not a `.py` path, falls back to
+#   eval/3_1_gen_toxicity_vllm.py (the original toxicity-only target).
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 SHIM_DIR="$REPO_ROOT/eval/_vllm_shim"
 EVAL_PYLIB="$REPO_ROOT/eval/_eval_pylib"
 
@@ -35,4 +43,12 @@ export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-/home/work/kftc_model/.cache/hu
 export VLLM_CACHE_ROOT="${VLLM_CACHE_ROOT:-/home/work/kftc_model/.cache/vllm}"
 export HF_HUB_DISABLE_PROGRESS_BARS="${HF_HUB_DISABLE_PROGRESS_BARS:-1}"
 
-exec python "$REPO_ROOT/eval/3_1_gen_toxicity_openlm.py" "$@"
+# Generic dispatch: first arg ending in .py is the script; otherwise default to
+# the original toxicity gen for backwards compat with existing phase scripts.
+if [[ "${1:-}" == *.py ]]; then
+  SCRIPT_REL="$1"; shift
+else
+  SCRIPT_REL="eval/3_1_gen_toxicity_vllm.py"
+fi
+
+exec python "$REPO_ROOT/$SCRIPT_REL" "$@"

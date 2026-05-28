@@ -1,7 +1,7 @@
 """
 유해성 응답 평가 결과 통계 계산 스크립트
 
-이 스크립트는 3_2_eval_toxicity_openai.py에서 생성된 CSV 파일을 읽어서
+이 스크립트는 3_2_eval_toxicity_openrouter.py에서 생성된 CSV 파일을 읽어서
 평가 점수 기반 통계를 계산하고 결과를 저장합니다.
 """
 
@@ -293,7 +293,7 @@ def process_csv(
     CSV 파일을 읽어서 통계 계산 수행
     
     Args:
-        input_csv_path: 입력 CSV 파일 경로 (3_2_eval_toxicity_openai.py에서 생성된 파일)
+        input_csv_path: 입력 CSV 파일 경로 (3_2_eval_toxicity_openrouter.py에서 생성된 파일)
         output_stats_path: 출력 통계 JSON 파일 경로
         model_name: 모델 이름
     """
